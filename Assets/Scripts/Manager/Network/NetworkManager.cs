@@ -11,6 +11,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public string NickName;
 
+    public List<string> PlayerNickNameList = new List<string>(4);
+
     #region # Unity_Function
     private void Awake()
     {
@@ -64,12 +66,23 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public static void CurrentRoomSetCP(string name, float value) => instance._CurrentRoomSetCP(name, value);
     public static void CurrentRoomSetCP(string name, string value) => instance._CurrentRoomSetCP(name, value);
 
-    private void _SetNickName(string name) 
+    private void _SetNickName(string name)
     {
         PhotonNetwork.LocalPlayer.NickName = name;
         NickName = PhotonNetwork.LocalPlayer.NickName;
     }
     public static void SetNickName(string name) => instance._SetNickName(name); // LocalPlayer의 닉네임을 설정합니다.
+
+    private void _UpdatePlayerList()
+    {
+        var playerList = PhotonNetwork.PlayerList;
+
+        for (int i = 0; i < playerList.Length; i++)
+        {
+            PlayerNickNameList[i] = playerList[i].NickName;
+        }
+    }
+    public static void UpdatePlayerList() => instance._UpdatePlayerList();
 
     #endregion
 }
