@@ -7,6 +7,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
+    #region # Variable
     public static NetworkManager instance;
 
     public string NickName;
@@ -16,7 +17,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public string PlayerNumCP = "";
 
     public List<string> PlayerList = new List<string>();
-
+    #endregion
 
     #region # Unity_Function
     private void Awake()
