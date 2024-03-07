@@ -55,8 +55,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnCreatedRoom()
     {
         LobbyManager.SetState("방을 생성했습니다 ! / " + CurrentRoomName);
-
-
     }
     public override void OnJoinedRoom()
     {
@@ -76,16 +74,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
         else
         {
-
             roomPlayerNum += 1;
 
             PlayerNum = (int)roomPlayerNum;
         }
 
-        List<string> playerList = new List<string>();
+        UpdatePlayerList();
+        LobbyManager.SetPlayerList(PlayerList);
+    }
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        Debug.Log("방에 유저가 접속했습니다 !");
 
-        foreach (var item in PhotonNetwork.CurrentRoom.Players) playerList.Add(item.Value.NickName);
-        PlayerList = playerList;
+        UpdatePlayerList();
+        LobbyManager.SetPlayerList(PlayerList);
     }
     public override void OnLeftRoom()
     {
@@ -128,6 +130,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     private void _UpdatePlayerList()
     {
+        List<string> playerList = new List<string>();
+
+        foreach (var item in PhotonNetwork.CurrentRoom.Players) playerList.Add(item.Value.NickName);
+        PlayerList = playerList;
     }
     public static void UpdatePlayerList() => instance._UpdatePlayerList();
 
