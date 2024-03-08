@@ -9,6 +9,9 @@ public class LobbyManager : MonoBehaviour
     public static LobbyManager instance;
 
     #region # Variable
+    [Header("Transform")]
+    [SerializeField] private Transform roomListContent;
+
     [Header("Rect Transform")]
     [SerializeField] private RectTransform UIPreset;
 
@@ -25,8 +28,11 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private Button roomCreateBtn;
     [SerializeField] private Button roomJoindBtn;
 
-    
+    [Header("Prefabs")]
+    [SerializeField] private GameObject roomListPrefab;
 
+    [Header("List")]
+    [SerializeField] private List<GameObject> roomListObjects = new List<GameObject>();
     #endregion
 
     #region # Unity_Function
@@ -34,16 +40,15 @@ public class LobbyManager : MonoBehaviour
     {
         if (instance == null) instance = this;
         else Destroy(gameObject);
-
     }
     private void Start()
     {
-        Screen.SetResolution(1920,1080,FullScreenMode.Windowed);
+        Screen.SetResolution(1920, 1080, FullScreenMode.Windowed);
 
         nameEnterBtn.onClick.AddListener(() =>
         {
             NetworkManager.SetNickName(nameInputField.text);
-            //UIPreset.DOLocalMoveX(-1920, 0.5f).SetEase(Ease.OutQuad);
+            UIPreset.DOLocalMoveX(-1920, 0.5f).SetEase(Ease.OutQuad);
         });
 
         roomCreateBtn.onClick.AddListener(() => NetworkManager.CreateRoom(roomNameInputField.text, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 }));
@@ -67,20 +72,40 @@ public class LobbyManager : MonoBehaviour
     }
     public static void SetPlayerList(List<string> playerList) => instance._SetPlayerList(playerList);
 
-    private void _RoomListUpdate(List<Data> roomData) 
-    { 
-    
+    private void _RoomListUpdate(List<Data> roomDatas)
+    {
+        foreach (var data in roomDatas)
+        {
+            RoomData roomData = Instantiate(roomListPrefab, roomListContent).GetComponent<RoomData>();
+
+            roomData.data = data;
+
+            roomListObjects.Add(roomData.gameObject);
+        }
+
+        foreach (var item in roomListObjects) 
+        { 
+            RoomData roomData = item.GetComponent<RoomData>();
+            roomData.UISetting();
+        }
     }
-    public void RoomListUpdate(List<Data> roomData) => instance._RoomListUpdate(roomData);
+    public static void RoomListUpdate(List<Data> roomDatas) => instance._RoomListUpdate(roomDatas);
+
+    private void _RoomListReset()
+    {
+        foreach (var item in roomListObjects) Destroy(item);
+        roomListObjects.Clear();
+    }
+    public static void RoomListReset() => instance._RoomListReset();
 
     private List<Data> _RoomInfoToRoomData(List<Photon.Realtime.RoomInfo> roomInfos)
     {
         List<Data> roomDataList = new List<Data>();
 
-        foreach (var roomInfo in roomInfos) 
+        foreach (var roomInfo in roomInfos)
         {
-            Data roomData = new Data() 
-            { 
+            Data roomData = new Data()
+            {
                 Name = roomInfo.Name,
                 IsVisible = roomInfo.IsVisible,
                 MaxPlayers = roomInfo.MaxPlayers,
