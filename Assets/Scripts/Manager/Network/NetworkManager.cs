@@ -86,6 +86,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         UpdatePlayerList();
         LobbyManager.SetPlayerList(PlayerList);
+
+
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {

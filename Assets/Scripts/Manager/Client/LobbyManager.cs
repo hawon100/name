@@ -61,6 +61,9 @@ public class LobbyManager : MonoBehaviour
     #endregion
 
     #region # Function
+    private void _UIPresetMove(float x, float y, float time) => UIPreset.DOLocalMove(new Vector3(x,y), time).SetEase(Ease.OutQuad);
+    public static void UIPresetMove(float x, float y, float time) => instance._UIPresetMove(x, y, time);
+
     private void _SetState(string state) => stateText.text = state;
     public static void SetState(string state) => instance._SetState(state);
 
