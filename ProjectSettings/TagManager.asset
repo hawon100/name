@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - S_Pos
+  - W_Pos
+  - N_Pos
+  - E_Pos
   layers:
   - Default
   - TransparentFX
