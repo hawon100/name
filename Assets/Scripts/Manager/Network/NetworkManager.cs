@@ -56,7 +56,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnConnected() => LobbyManager.SetState("연결 되었습니다 !");
     public override void OnConnectedToMaster() => PhotonNetwork.JoinLobby();
     public override void OnJoinedLobby() => LobbyManager.SetState("로비에 참가했습니다 !");
-    
+
     public override void OnCreatedRoom()
     {
         LobbyManager.SetState("방을 생성했습니다 ! / " + CurrentRoomName);
@@ -87,7 +87,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         UpdatePlayerList();
         LobbyManager.SetPlayerList(PlayerList);
 
-
+        LobbyManager.UIPresetMove(-3840, 0, 0.5f);
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {

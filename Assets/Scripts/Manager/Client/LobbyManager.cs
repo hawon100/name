@@ -52,7 +52,6 @@ public class LobbyManager : MonoBehaviour
         });
 
         roomCreateBtn.onClick.AddListener(() => NetworkManager.CreateRoom(roomNameInputField.text, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 }));
-        roomJoindBtn.onClick.AddListener(() => NetworkManager.JoinRoom(roomNameInputField.text));
     }
     private void Update()
     {
@@ -77,6 +76,7 @@ public class LobbyManager : MonoBehaviour
 
     private void _RoomListUpdate(List<Data> roomDatas)
     {
+        RoomListReset();
         foreach (var data in roomDatas)
         {
             RoomData roomData = Instantiate(roomListPrefab, roomListContent).GetComponent<RoomData>();
