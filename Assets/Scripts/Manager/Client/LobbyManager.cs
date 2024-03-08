@@ -24,6 +24,9 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private Button nameEnterBtn;
     [SerializeField] private Button roomCreateBtn;
     [SerializeField] private Button roomJoindBtn;
+
+    
+
     #endregion
 
     #region # Unity_Function
@@ -35,6 +38,8 @@ public class LobbyManager : MonoBehaviour
     }
     private void Start()
     {
+        Screen.SetResolution(1920,1080,FullScreenMode.Windowed);
+
         nameEnterBtn.onClick.AddListener(() =>
         {
             NetworkManager.SetNickName(nameInputField.text);
@@ -61,5 +66,32 @@ public class LobbyManager : MonoBehaviour
         foreach (var item in playerList) playerListText.text += ("\n" + item);
     }
     public static void SetPlayerList(List<string> playerList) => instance._SetPlayerList(playerList);
+
+    private void _RoomListUpdate(List<Data> roomData) 
+    { 
+    
+    }
+    public void RoomListUpdate(List<Data> roomData) => instance._RoomListUpdate(roomData);
+
+    private List<Data> _RoomInfoToRoomData(List<Photon.Realtime.RoomInfo> roomInfos)
+    {
+        List<Data> roomDataList = new List<Data>();
+
+        foreach (var roomInfo in roomInfos) 
+        {
+            Data roomData = new Data() 
+            { 
+                Name = roomInfo.Name,
+                IsVisible = roomInfo.IsVisible,
+                MaxPlayers = roomInfo.MaxPlayers,
+                PlayerCount = roomInfo.PlayerCount,
+            };
+
+            roomDataList.Add(roomData);
+        }
+
+        return roomDataList;
+    }
+    public static List<Data> RoomInfoToRoomData(List<Photon.Realtime.RoomInfo> roomInfos) => instance._RoomInfoToRoomData(roomInfos);
     #endregion
 }
