@@ -20,13 +20,19 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI stateText;
 
     [Header("TMP_InputField")]
-    [SerializeField] private TMP_InputField nameInputField;
     [SerializeField] private TMP_InputField roomNameInputField;
+    [SerializeField] private TMP_InputField loginIdInputField;
+    [SerializeField] private TMP_InputField loginPassInputField;
+    [SerializeField] private TMP_InputField registerIdInputField;
+    [SerializeField] private TMP_InputField registerPassInputField;
 
     [Header("Button")]
-    [SerializeField] private Button nameEnterBtn;
+
     [SerializeField] private Button roomCreateBtn;
-    [SerializeField] private Button roomJoindBtn;
+    [SerializeField] private Button loginBtn;
+    [SerializeField] private Button loginEnterBtn;
+    [SerializeField] private Button registerBtn;
+    [SerializeField] private Button registerEngerBtn;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject roomListPrefab;
@@ -45,11 +51,11 @@ public class LobbyManager : MonoBehaviour
     {
         Screen.SetResolution(1920, 1080, FullScreenMode.Windowed);
 
-        nameEnterBtn.onClick.AddListener(() =>
-        {
-            NetworkManager.SetNickName(nameInputField.text);
-            UIPreset.DOLocalMoveX(-1920, 0.5f).SetEase(Ease.OutQuad);
-        });
+        loginBtn.onClick.AddListener(() => { UIPresetMove(0, 0, 0.5f); });
+        loginEnterBtn.onClick.AddListener(() => { GoogleSheetManager.Login(loginIdInputField.text, loginPassInputField.text); });
+
+        registerBtn.onClick.AddListener(() => { UIPresetMove(0, 1080, 0.5f); });
+        registerEngerBtn.onClick.AddListener(() => { GoogleSheetManager.Register(registerIdInputField.text, registerPassInputField.text);});
 
         roomCreateBtn.onClick.AddListener(() => NetworkManager.CreateRoom(roomNameInputField.text, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 }));
     }
@@ -60,7 +66,7 @@ public class LobbyManager : MonoBehaviour
     #endregion
 
     #region # Function
-    private void _UIPresetMove(float x, float y, float time) => UIPreset.DOLocalMove(new Vector3(x,y), time).SetEase(Ease.OutQuad);
+    private void _UIPresetMove(float x, float y, float time) => UIPreset.DOLocalMove(new Vector3(x, y), time).SetEase(Ease.OutQuad);
     public static void UIPresetMove(float x, float y, float time) => instance._UIPresetMove(x, y, time);
 
     private void _SetState(string state) => stateText.text = state;
@@ -86,8 +92,8 @@ public class LobbyManager : MonoBehaviour
             roomListObjects.Add(roomData.gameObject);
         }
 
-        foreach (var item in roomListObjects) 
-        { 
+        foreach (var item in roomListObjects)
+        {
             RoomData roomData = item.GetComponent<RoomData>();
             roomData.UISetting();
         }
