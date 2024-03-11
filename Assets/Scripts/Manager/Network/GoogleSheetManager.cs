@@ -16,7 +16,7 @@ public class GoogleSheetManager : MonoBehaviour
     public static GoogleSheetManager instance;
     public GoogleData GD;
 
-    const string URL = "https://script.google.com/macros/s/AKfycbyNPm2wGhYf8_5dFVe_0HC55w82gXm-Xkp_bJruub_85riZ-_RU26Jjm7YQNgFI75lC/exec";
+    const string URL = "https://script.google.com/macros/s/AKfycbyjjJ9tWIOnJfMrCTB9nNCPdqZNipnHmJwbpLD9wNwr8FqV06t41B6jizkyjGUhBxVi/exec";
 
     public string Id;
     public string Password;
