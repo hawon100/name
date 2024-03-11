@@ -5476,15 +5476,15 @@ MonoBehaviour:
   playerListText: {fileID: 1709643998}
   stateText: {fileID: 1625048112}
   roomNameInputField: {fileID: 430318267}
-  loginIdInputField: {fileID: 478281242}
-  loginPassInputField: {fileID: 0}
-  registerIdInputField: {fileID: 0}
-  registerPassInputField: {fileID: 0}
+  loginIdInputField: {fileID: 1686141476}
+  loginPassInputField: {fileID: 478281242}
+  registerIdInputField: {fileID: 946026125}
+  registerPassInputField: {fileID: 777667637}
   roomCreateBtn: {fileID: 937932671}
-  loginBtn: {fileID: 0}
-  loginEnterBtn: {fileID: 0}
-  registerBtn: {fileID: 0}
-  registerEngerBtn: {fileID: 0}
+  loginBtn: {fileID: 151192746}
+  loginEnterBtn: {fileID: 821589094}
+  registerBtn: {fileID: 5991164}
+  registerEngerBtn: {fileID: 1437488456}
   roomListPrefab: {fileID: 2822052164138003067, guid: da17acbac5bda744b805ac2e15579498, type: 3}
   roomListObjects: []
 --- !u!1 &2112311251
