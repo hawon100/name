@@ -71,7 +71,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-
             PlayerNumCP = CurrentRoomName + "_roomPlayerNum";
             _CurrentRoomSetCP(PlayerNumCP, roomPlayerNum);
 
@@ -80,7 +79,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         else
         {
             roomPlayerNum += 1;
-
             PlayerNum = (int)roomPlayerNum;
         }
 

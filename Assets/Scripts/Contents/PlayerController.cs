@@ -12,6 +12,10 @@ public class PlayerPos
     public Transform e_Pos;
 }
 
+public enum PlayerState
+{
+    S,W,N,E
+}
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody _rigid;

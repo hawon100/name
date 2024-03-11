@@ -18,6 +18,8 @@ public class LobbyManager : MonoBehaviour
     [Header("TextMeshPro UGUI")]
     [SerializeField] private TextMeshProUGUI playerListText;
     [SerializeField] private TextMeshProUGUI stateText;
+    [SerializeField] private TextMeshProUGUI registerFailText;
+    [SerializeField] private TextMeshProUGUI idText;
 
     [Header("TMP_InputField")]
     [SerializeField] private TMP_InputField roomNameInputField;
@@ -52,10 +54,15 @@ public class LobbyManager : MonoBehaviour
         Screen.SetResolution(1920, 1080, FullScreenMode.Windowed);
 
         loginBtn.onClick.AddListener(() => { UIPresetMove(0, 0, 0.5f); });
-        loginEnterBtn.onClick.AddListener(() => { GoogleSheetManager.Login(loginIdInputField.text, loginPassInputField.text); });
+        loginEnterBtn.onClick.AddListener(() =>
+        {
+            GoogleSheetManager.Login(loginIdInputField.text, loginPassInputField.text);
+            NetworkManager.SetNickName(loginIdInputField.text);
+            idText.text = loginIdInputField.text + "님! 환영합니다!";
+        });
 
         registerBtn.onClick.AddListener(() => { UIPresetMove(0, 1080, 0.5f); });
-        registerEngerBtn.onClick.AddListener(() => { GoogleSheetManager.Register(registerIdInputField.text, registerPassInputField.text);});
+        registerEngerBtn.onClick.AddListener(() => { GoogleSheetManager.Register(registerIdInputField.text, registerPassInputField.text); });
 
         roomCreateBtn.onClick.AddListener(() => NetworkManager.CreateRoom(roomNameInputField.text, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 }));
     }
@@ -127,5 +134,28 @@ public class LobbyManager : MonoBehaviour
         return roomDataList;
     }
     public static List<Data> RoomInfoToRoomData(List<Photon.Realtime.RoomInfo> roomInfos) => instance._RoomInfoToRoomData(roomInfos);
+
+    private IEnumerator _SetVisibleUI(GameObject obj, float time)
+    {
+        obj.SetActive(true);
+        yield return new WaitForSeconds(time);
+        obj.SetActive(false);
+    }
+
+    public static void RegisterFailVisible(string text, float time)
+    {
+        instance.registerFailText.text = text;
+
+        var obj = instance.registerFailText.gameObject;
+
+        instance.StopAllCoroutines();
+        instance.StartCoroutine(instance._SetVisibleUI(obj, time));
+    }
+
+    private void _LoginComplete()
+    {
+        UIPresetMove(-1920,0,0.5f);
+    }
+    public static void LoginComplete() => instance._LoginComplete();
     #endregion
 }

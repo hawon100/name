@@ -16,13 +16,15 @@ public class GoogleSheetManager : MonoBehaviour
     public static GoogleSheetManager instance;
     public GoogleData GD;
 
-    const string URL = "https://script.google.com/macros/s/AKfycbwAp6-WLtpbfDV5RN9BuJU_T9R-S6WmNZtuw-wzEEoB-eSCsn0n01lPXTwKUGws-bzt/exec";
+    const string URL = "https://script.google.com/macros/s/AKfycbxujHfqvijOx7oX9UuFlI9k7OAmnMXsLpC_hJO5vogLCFuELkawZkE2ybQUcHomjaZL/exec";
 
     public string Id;
     public string Password;
 
     public string valueText;
 
+    [SerializeField] private bool isLogin = false;
+    [SerializeField] private bool isPost = false;
     #endregion
     #region Unity_Function
     private void Awake()
@@ -43,11 +45,29 @@ public class GoogleSheetManager : MonoBehaviour
         else return true;
     }
 
+    private bool _CheckIDLenght(string id) 
+    {
+        char[] _id = id.ToCharArray();
+        if (_id.Length > 5 && _id.Length <= 16) return true; // 6자 이상 16자 이하
+        else return false;
+    }
+
+    private bool _CheckPasswordLength(string password) 
+    {
+        char[] _password = password.ToCharArray();
+        if (_password.Length > 7 && _password.Length <= 20) return true; // 8자 이상 20자 이하
+        else return false;
+    }
+
     private void _Register(string id, string password)
     {
         Debug.Log("Register");
 
-        if (!_SetIdPassword(id, password)) return; // id or password is blank
+        if (!_SetIdPassword(id, password)) { Debug.Log("ID 혹은 패스워드가 비어있습니다."); return; }
+
+        if (!_CheckIDLenght(id)) { LobbyManager.RegisterFailVisible("아이디가 너무 짧습니다.", 2f); return; }
+
+        if (!_CheckPasswordLength(password)) { LobbyManager.RegisterFailVisible("비밀번호가 너무 짧습니다.", 2f); return; }
 
         WWWForm form = new WWWForm();
         form.AddField("order", "register");
@@ -61,18 +81,21 @@ public class GoogleSheetManager : MonoBehaviour
 
     private void _Login(string id, string password)
     {
-        if (!_SetIdPassword(id,password))
+        if (isPost == false) 
         {
-            print("아이디 또는 비밀번호가 비어있습니다");
-            return;
+            if (!_SetIdPassword(id, password))
+            {
+                print("아이디 또는 비밀번호가 비어있습니다");
+                return;
+            }
+
+            WWWForm form = new WWWForm();
+            form.AddField("order", "login");
+            form.AddField("id", id);
+            form.AddField("pass", password);
+
+            Post(form);
         }
-
-        WWWForm form = new WWWForm();
-        form.AddField("order", "login");
-        form.AddField("id", id);
-        form.AddField("pass", password);
-
-        Post(form);
     }
     public static void Login(string id, string password) => instance._Login(id, password);
 
@@ -90,6 +113,12 @@ public class GoogleSheetManager : MonoBehaviour
 
         print(GD.order + "을 실행했습니다. 메시지 : " + GD.msg);
 
+        if (GD.msg == "Login Complete") 
+        { 
+            LobbyManager.LoginComplete();
+            isLogin = true;
+        }
+
         if (GD.order == "getValue")
         {
             valueText = GD.value;
@@ -100,10 +129,11 @@ public class GoogleSheetManager : MonoBehaviour
     private IEnumerator _Post(WWWForm form)
     {
         Debug.Log(form + " (Unity) ");
+        isPost = true;
         using (UnityWebRequest www = UnityWebRequest.Post(URL, form))
         {
             yield return www.SendWebRequest();
-
+            isPost = false; 
             if (www.isDone) Response(www.downloadHandler.text);
             else Debug.LogError("웹의 응답이 없습니다.");
         }
