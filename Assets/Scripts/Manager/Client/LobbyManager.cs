@@ -15,11 +15,15 @@ public class LobbyManager : MonoBehaviour
     [Header("Rect Transform")]
     [SerializeField] private RectTransform UIPreset;
 
+    [Header("Image")]
+    [SerializeField] private List<Image> playerImages = new List<Image>();
+
     [Header("TextMeshPro UGUI")]
     [SerializeField] private TextMeshProUGUI playerListText;
     [SerializeField] private TextMeshProUGUI stateText;
     [SerializeField] private TextMeshProUGUI registerFailText;
     [SerializeField] private TextMeshProUGUI idText;
+    [SerializeField] private List<TextMeshProUGUI> readyTexts = new List<TextMeshProUGUI>();
 
     [Header("TMP_InputField")]
     [SerializeField] private TMP_InputField roomNameInputField;
@@ -71,7 +75,9 @@ public class LobbyManager : MonoBehaviour
         readyBtn.onClick.AddListener(() =>
         {
             NetworkManager.SetValueLocalPlayerCP("Ready", true);
-            NetworkManager.GetOtherPlayerCP(0,"Ready");
+            NetworkManager.GetOtherPlayerCP(0, "Ready");
+
+            readyTexts[NetworkManager.instance.PlayerCount].text = "Ready";
         });
     }
     private void Update()
@@ -97,6 +103,7 @@ public class LobbyManager : MonoBehaviour
 
     private void _RoomListUpdate(List<Data> roomDatas)
     {
+        Debug.Log("RoomListUpdate"); 
         RoomListReset();
         foreach (var data in roomDatas)
         {
@@ -165,5 +172,6 @@ public class LobbyManager : MonoBehaviour
         UIPresetMove(-1920, 0, 0.5f);
     }
     public static void LoginComplete() => instance._LoginComplete();
+
     #endregion
 }

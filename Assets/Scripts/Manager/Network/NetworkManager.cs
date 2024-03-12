@@ -13,6 +13,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public string NickName;
     public int PlayerNum = 0;
 
+    public int PlayerCount
+    {
+        get
+        {
+            if (PhotonNetwork.CurrentRoom == null) return 0;
+            else return PhotonNetwork.CurrentRoom.PlayerCount;
+        }
+    }
+
     public string CurrentRoomName = "";
     public string PlayerNumCP = "";
 
@@ -49,8 +58,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public static void CreateRoom(string roomName, RoomOptions roomOptions)
     {
         PhotonNetwork.CreateRoom(roomName, roomOptions);
-
+        
         instance.CurrentRoomName = roomName;
+
     }
     public static void ExitRoom()
     {
@@ -64,7 +74,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnCreatedRoom()
     {
-        LobbyManager.SetState("방을 생성했습니다 ! / " + CurrentRoomName);
+        Debug.Log("방을 생성했습니다 ! / " + CurrentRoomName);
     }
     public override void OnJoinedRoom()
     {
@@ -108,9 +118,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+        Debug.Log("RoomListUpdate");
         RoomList = LobbyManager.RoomInfoToRoomData(roomList);
 
         LobbyManager.RoomListUpdate(RoomList);
+        foreach (var room in roomList) Debug.Log(room.Name); 
     }
 
     private void _CurrentRoomSetCP(string name, float value) // 선택된 방에 Custom Property를 추가합니다. (float) 
@@ -177,7 +189,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         player.CustomProperties[name] = value;
     }
     public static void SetValueLocalPlayerCP(string name, bool value) => instance._SetValueLocalPlayerCP(name, value);
-    /// 
+
     private void _SetNickName(string name)
     {
         PhotonNetwork.LocalPlayer.NickName = name;
