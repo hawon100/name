@@ -52,6 +52,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         instance.CurrentRoomName = roomName;
     }
+    public static void ExitRoom()
+    {
+        if (PhotonNetwork.IsMasterClient) PhotonNetwork.LeaveRoom(false);
+        else PhotonNetwork.LeaveRoom(true);
+    }
 
     public override void OnConnected() => LobbyManager.SetState("연결 되었습니다 !");
     public override void OnConnectedToMaster() => PhotonNetwork.JoinLobby();
@@ -64,8 +69,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         LobbyManager.SetState("방에 참가했습니다 ! / " + CurrentRoomName);
-
-        Hashtable roomCP = PhotonNetwork.CurrentRoom.CustomProperties;
 
         float roomPlayerNum = 1;
 
@@ -85,6 +88,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         UpdatePlayerList();
         LobbyManager.SetPlayerList(PlayerList);
 
+        LocalPlayerSetCP("Ready", false);
+
         LobbyManager.UIPresetMove(-3840, 0, 0.5f);
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -98,6 +103,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         CurrentRoomName = "";
         PlayerNumCP = "";
+
+        DeleteLocalPlayerCP("Ready");
     }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
@@ -132,6 +139,45 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public static void CurrentRoomSetCP(string name, float value) => instance._CurrentRoomSetCP(name, value);
     public static void CurrentRoomSetCP(string name, string value) => instance._CurrentRoomSetCP(name, value);
 
+    private void _LocalPlayerSetCP(string name, bool value)
+    {
+        var player = PhotonNetwork.LocalPlayer;
+
+        Hashtable ht = new Hashtable();
+        ht[name] = value;
+
+        Debug.Log("LocalPlayerSetCP / Result : " + ht[name]);
+
+        player.SetCustomProperties(ht);
+    }
+    public void LocalPlayerSetCP(string name, bool value) => instance._LocalPlayerSetCP(name, value);
+
+    private bool _GetOtherPlayerCP(int index, string name)
+    {
+        var player = PhotonNetwork.PlayerListOthers[index];
+        bool result = (bool)player.CustomProperties[name];
+
+        Debug.Log("GetOtherPlayerCP / Result = " + player.CustomProperties[name]);
+        Debug.Log("NickName : " + player.NickName);
+
+        return result;
+    }
+    public static bool GetOtherPlayerCP(int index, string name) => instance._GetOtherPlayerCP(index, name);
+
+    private void _DeleteLocalPlayerCP(string name)
+    {
+        var player = PhotonNetwork.LocalPlayer;
+        player.CustomProperties[name] = null;
+    }
+    public static void DeleteLocalPlayerCP(string name) => instance._DeleteLocalPlayerCP(name);
+
+    private void _SetValueLocalPlayerCP(string name, bool value)
+    {
+        var player = PhotonNetwork.LocalPlayer;
+        player.CustomProperties[name] = value;
+    }
+    public static void SetValueLocalPlayerCP(string name, bool value) => instance._SetValueLocalPlayerCP(name, value);
+    /// 
     private void _SetNickName(string name)
     {
         PhotonNetwork.LocalPlayer.NickName = name;

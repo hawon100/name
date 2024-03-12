@@ -32,8 +32,8 @@ public class PlayerMove : MonoBehaviour
         switch (playerDirection)
         {
             case Direction.E: rb.velocity = new Vector3(5 * x, rb.velocity.y, 0); break;
-            case Direction.W: rb.velocity = new Vector3(5 * x, rb.velocity.y, 0); break;
-            case Direction.S: rb.velocity = new Vector3(0, rb.velocity.y, 5 * x); break;
+            case Direction.W: rb.velocity = new Vector3(-5 * x, rb.velocity.y, 0); break;
+            case Direction.S: rb.velocity = new Vector3(0, rb.velocity.y, -5 * x); break;
             case Direction.N: rb.velocity = new Vector3(0, rb.velocity.y, 5 * x); break;
         }
     }

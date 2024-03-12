@@ -29,12 +29,13 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private TMP_InputField registerPassInputField;
 
     [Header("Button")]
-
     [SerializeField] private Button roomCreateBtn;
     [SerializeField] private Button loginBtn;
     [SerializeField] private Button loginEnterBtn;
     [SerializeField] private Button registerBtn;
     [SerializeField] private Button registerEngerBtn;
+    [SerializeField] private Button roomExitBtn;
+    [SerializeField] private Button readyBtn;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject roomListPrefab;
@@ -65,6 +66,13 @@ public class LobbyManager : MonoBehaviour
         registerEngerBtn.onClick.AddListener(() => { GoogleSheetManager.Register(registerIdInputField.text, registerPassInputField.text); });
 
         roomCreateBtn.onClick.AddListener(() => NetworkManager.CreateRoom(roomNameInputField.text, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 }));
+        roomExitBtn.onClick.AddListener(() => NetworkManager.ExitRoom());
+
+        readyBtn.onClick.AddListener(() =>
+        {
+            NetworkManager.SetValueLocalPlayerCP("Ready", true);
+            NetworkManager.GetOtherPlayerCP(0,"Ready");
+        });
     }
     private void Update()
     {
@@ -94,7 +102,7 @@ public class LobbyManager : MonoBehaviour
         {
             RoomData roomData = Instantiate(roomListPrefab, roomListContent).GetComponent<RoomData>();
 
-            roomData.data = data;
+            roomData.CurrentData = data;
 
             roomListObjects.Add(roomData.gameObject);
         }
@@ -154,7 +162,7 @@ public class LobbyManager : MonoBehaviour
 
     private void _LoginComplete()
     {
-        UIPresetMove(-1920,0,0.5f);
+        UIPresetMove(-1920, 0, 0.5f);
     }
     public static void LoginComplete() => instance._LoginComplete();
     #endregion
