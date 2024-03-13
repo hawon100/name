@@ -8,6 +8,8 @@ public class LobbyManager : MonoBehaviour
 {
     public static LobbyManager instance;
 
+    public bool isLobby;
+
     #region # Variable
     [Header("Transform")]
     [SerializeField] private Transform roomListContent;
@@ -16,6 +18,7 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private RectTransform UIPreset;
 
     [Header("Image")]
+    [SerializeField] private Image PlayerColorPreviewImage;
     [SerializeField] private List<Image> playerImages = new List<Image>();
 
     [Header("TextMeshPro UGUI")]
@@ -40,6 +43,10 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private Button registerEngerBtn;
     [SerializeField] private Button roomExitBtn;
     [SerializeField] private Button readyBtn;
+    [SerializeField] private Button PlayerColorRedBtn;
+    [SerializeField] private Button PlayerColorBlueBtn;
+    [SerializeField] private Button PlayerColorGreenBtn;
+    [SerializeField] private Button PlayerColorYellowBtn;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject roomListPrefab;
@@ -69,16 +76,25 @@ public class LobbyManager : MonoBehaviour
         registerBtn.onClick.AddListener(() => { UIPresetMove(0, 1080, 0.5f); });
         registerEngerBtn.onClick.AddListener(() => { GoogleSheetManager.Register(registerIdInputField.text, registerPassInputField.text); });
 
-        roomCreateBtn.onClick.AddListener(() => NetworkManager.CreateRoom(roomNameInputField.text, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 }));
+        roomCreateBtn.onClick.AddListener(() =>
+        {
+            NetworkManager.CreateRoom(roomNameInputField.text, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 });
+           
+        });
         roomExitBtn.onClick.AddListener(() => NetworkManager.ExitRoom());
 
         readyBtn.onClick.AddListener(() =>
         {
             NetworkManager.SetValueLocalPlayerCP("Ready", true);
-            NetworkManager.GetOtherPlayerCP(0, "Ready");
 
-            readyTexts[NetworkManager.instance.PlayerCount].text = "Ready";
+            readyTexts[NetworkManager.instance.SeatNum].text = "Ready";
         });
+
+        PlayerColorRedBtn.onClick.AddListener(() => { PlayerColorPreviewImage.color = PlayerColorRedBtn.GetComponent<Image>().color; });
+        PlayerColorBlueBtn.onClick.AddListener(() => { PlayerColorPreviewImage.color = PlayerColorBlueBtn.GetComponent<Image>().color; });
+        PlayerColorGreenBtn.onClick.AddListener(() => { PlayerColorPreviewImage.color = PlayerColorGreenBtn.GetComponent<Image>().color; });
+        PlayerColorYellowBtn.onClick.AddListener(() => { PlayerColorPreviewImage.color = PlayerColorYellowBtn.GetComponent<Image>().color; });
+
     }
     private void Update()
     {
@@ -103,8 +119,9 @@ public class LobbyManager : MonoBehaviour
 
     private void _RoomListUpdate(List<Data> roomDatas)
     {
-        Debug.Log("RoomListUpdate"); 
+        Debug.Log("RoomListUpdate");
         RoomListReset();
+    
         foreach (var data in roomDatas)
         {
             RoomData roomData = Instantiate(roomListPrefab, roomListContent).GetComponent<RoomData>();
@@ -172,6 +189,38 @@ public class LobbyManager : MonoBehaviour
         UIPresetMove(-1920, 0, 0.5f);
     }
     public static void LoginComplete() => instance._LoginComplete();
+
+    private void _RoomSeatCheck()
+    {
+        string name = "RoomSeat_";
+
+        List<string> roomSeatIndexName = new List<string>();
+        roomSeatIndexName.Add("RoomSeat_0");
+        roomSeatIndexName.Add("RoomSeat_1");
+        roomSeatIndexName.Add("RoomSeat_2");
+        roomSeatIndexName.Add("RoomSeat_3");
+
+        
+        StartCoroutine(function());
+        IEnumerator function()
+        {
+            yield return new WaitForSeconds(10);
+            for (int i = 0; i < 4; i++)
+            {
+                string indexName = roomSeatIndexName[i];
+                Debug.Log(indexName);
+
+                if (!NetworkManager.CurrentBoolRoomGetCP(indexName))
+                {
+                    NetworkManager.LocalPlayerSetCP("Seat_Index", i);
+                    NetworkManager.SetValueCurrentRoomCP(indexName, false);
+                    NetworkManager.instance.SeatNum = i;
+                    break;
+                }
+            }
+        }
+    }
+    public static void RoomSeatCheck() => instance._RoomSeatCheck();
 
     #endregion
 }
