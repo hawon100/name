@@ -40,6 +40,9 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - _ShareRoomSeatList
+  - _SeatRoomChageRPC
+  - _RoomUIUpdateRPC
+  - _TextUpdateRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 using DG.Tweening;
 using TMPro;
 public class LobbyManager : MonoBehaviour
@@ -10,6 +11,7 @@ public class LobbyManager : MonoBehaviour
 
     public bool isLobby;
 
+    private PhotonView pv;
     #region # Variable
     [Header("Transform")]
     [SerializeField] private Transform roomListContent;
@@ -42,7 +44,6 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private Button registerBtn;
     [SerializeField] private Button registerEngerBtn;
     [SerializeField] private Button roomExitBtn;
-    [SerializeField] private Button readyBtn;
     [SerializeField] private Button PlayerColorRedBtn;
     [SerializeField] private Button PlayerColorBlueBtn;
     [SerializeField] private Button PlayerColorGreenBtn;
@@ -65,6 +66,8 @@ public class LobbyManager : MonoBehaviour
     {
         Screen.SetResolution(1920, 1080, FullScreenMode.Windowed);
 
+        pv = GetComponent<PhotonView>();
+
         loginBtn.onClick.AddListener(() => { UIPresetMove(0, 0, 0.5f); });
         loginEnterBtn.onClick.AddListener(() =>
         {
@@ -82,13 +85,6 @@ public class LobbyManager : MonoBehaviour
 
         });
         roomExitBtn.onClick.AddListener(() => NetworkManager.ExitRoom());
-
-        readyBtn.onClick.AddListener(() =>
-        {
-            NetworkManager.SetValueLocalPlayerCP("Ready", true);
-
-            readyTexts[NetworkManager.instance.SeatNum].text = "Ready";
-        });
 
         PlayerColorRedBtn.onClick.AddListener(() => { PlayerColorPreviewImage.color = PlayerColorRedBtn.GetComponent<Image>().color; });
         PlayerColorBlueBtn.onClick.AddListener(() => { PlayerColorPreviewImage.color = PlayerColorBlueBtn.GetComponent<Image>().color; });
@@ -189,19 +185,6 @@ public class LobbyManager : MonoBehaviour
         UIPresetMove(-1920, 0, 0.5f);
     }
     public static void LoginComplete() => instance._LoginComplete();
-
-
-    private void _RoomSeatCheck()
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            if (NetworkManager.instance.RoomSeatList[i] == false)
-            {
-                NetworkManager.SeatStateChange(i,true);
-            }
-        }
-    }
-    public static void RoomSeatCheck() => instance._RoomSeatCheck();
 
     #endregion
 }

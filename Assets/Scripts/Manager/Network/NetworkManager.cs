@@ -40,7 +40,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public List<Data> RoomList = new List<Data>();
 
+    public bool HasSeat = false;
     public int SeatNum = 0;
+
+    public bool IsReady;
     #endregion
 
     #region # Unity_Function
@@ -129,6 +132,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         LocalPlayerSetCP("Ready", false);
         LobbyManager.UIPresetMove(-3840, 0, 0.5f);
+
         _ShareRoomSeatList();
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -137,6 +141,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         UpdatePlayerList();
         LobbyManager.SetPlayerList(PlayerList);
+        if (PhotonNetwork.IsMasterClient) LobbyManager.RoomSeatCheck();
     }
     public override void OnLeftRoom()
     {
@@ -338,22 +343,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         return PlayerList;
     }
     public static List<string> GetPlayerList() => instance._GetPlayerList();
-
-    private void _ShareRoomSeatList()
-    {
-        if (!PhotonNetwork.IsMasterClient)
-        {
-            bool[] roomSeats = (bool[])PhotonNetwork.MasterClient.CustomProperties["RoomSeat"];
-            for (int i = 0; i < roomSeats.Length; i++) RoomSeatList.Add(roomSeats[i]);
-        }
-    }
-    [PunRPC]
-    private void _SeatRoomChageRPC(int index, bool value)
-    {
-        RoomSeatList[index] = value;
-    }
-    private void _SeatStateChange(int index, bool value) => pv.RPC("_SeatRoomChageRPC", RpcTarget.All, index, value);
-    public static void SeatStateChange(int index, bool value) => instance._SeatStateChange(index, value);
 
     #endregion
 }
