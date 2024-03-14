@@ -79,7 +79,7 @@ public class LobbyManager : MonoBehaviour
         roomCreateBtn.onClick.AddListener(() =>
         {
             NetworkManager.CreateRoom(roomNameInputField.text, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 });
-           
+
         });
         roomExitBtn.onClick.AddListener(() => NetworkManager.ExitRoom());
 
@@ -121,7 +121,7 @@ public class LobbyManager : MonoBehaviour
     {
         Debug.Log("RoomListUpdate");
         RoomListReset();
-    
+
         foreach (var data in roomDatas)
         {
             RoomData roomData = Instantiate(roomListPrefab, roomListContent).GetComponent<RoomData>();
@@ -190,33 +190,14 @@ public class LobbyManager : MonoBehaviour
     }
     public static void LoginComplete() => instance._LoginComplete();
 
+
     private void _RoomSeatCheck()
     {
-        string name = "RoomSeat_";
-
-        List<string> roomSeatIndexName = new List<string>();
-        roomSeatIndexName.Add("RoomSeat_0");
-        roomSeatIndexName.Add("RoomSeat_1");
-        roomSeatIndexName.Add("RoomSeat_2");
-        roomSeatIndexName.Add("RoomSeat_3");
-
-        
-        StartCoroutine(function());
-        IEnumerator function()
+        for (int i = 0; i < 4; i++)
         {
-            yield return new WaitForSeconds(10);
-            for (int i = 0; i < 4; i++)
+            if (NetworkManager.instance.RoomSeatList[i] == false)
             {
-                string indexName = roomSeatIndexName[i];
-                Debug.Log(indexName);
-
-                if (!NetworkManager.CurrentBoolRoomGetCP(indexName))
-                {
-                    NetworkManager.LocalPlayerSetCP("Seat_Index", i);
-                    NetworkManager.SetValueCurrentRoomCP(indexName, false);
-                    NetworkManager.instance.SeatNum = i;
-                    break;
-                }
+                NetworkManager.SeatStateChange(i,true);
             }
         }
     }

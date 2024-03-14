@@ -10,6 +10,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     #region # Variable
     public static NetworkManager instance;
 
+    private PhotonView pv;
+
     public string NickName;
     public int PlayerNum = 0;
 
@@ -24,7 +26,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public Room CurrentRoom
     {
-        get 
+        get
         {
             return PhotonNetwork.CurrentRoom;
         }
@@ -34,6 +36,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public string PlayerNumCP = "";
 
     public List<string> PlayerList = new List<string>();
+    public List<bool> RoomSeatList = new List<bool>();
+
     public List<Data> RoomList = new List<Data>();
 
     public int SeatNum = 0;
@@ -53,6 +57,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         ConnectUsingSettings();
+        pv = GetComponent<PhotonView>();
     }
     #endregion
 
@@ -70,7 +75,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(roomName, roomOptions);
         instance.CurrentRoomName = roomName;
 
-        
+
     }
     public static void ExitRoom()
     {
@@ -89,7 +94,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnCreatedRoom()
     {
         Debug.Log("방을 생성했습니다 ! / " + CurrentRoomName);
-        // Room Seat Create
+        if (PhotonNetwork.IsMasterClient)
+        {
+            for (int i = 0; i < 4; i++) RoomSeatList.Add(false);
+
+            Hashtable ht = new Hashtable();
+            ht["RoomSeat"] = RoomSeatList.ToArray();
+            PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
+        }
     }
     public override void OnJoinedRoom()
     {
@@ -104,10 +116,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
             PlayerNum = (int)roomPlayerNum;
 
-            NetworkManager.CurrentRoomSetCP("RoomSeat_0", false);
-            NetworkManager.CurrentRoomSetCP("RoomSeat_1", false);
-            NetworkManager.CurrentRoomSetCP("RoomSeat_2", false);
-            NetworkManager.CurrentRoomSetCP("RoomSeat_3", false);
         }
         else
         {
@@ -121,7 +129,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         LocalPlayerSetCP("Ready", false);
         LobbyManager.UIPresetMove(-3840, 0, 0.5f);
-        LobbyManager.RoomSeatCheck();
+        _ShareRoomSeatList();
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
@@ -134,6 +142,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         CurrentRoomName = "";
         PlayerNumCP = "";
+
+        RoomSeatList = null;
 
         DeleteLocalPlayerCP("Ready");
     }
@@ -265,7 +275,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public static void LocalPlayerSetCP(string name, bool value) => instance._LocalPlayerSetCP(name, value);
     public static void LocalPlayerSetCP(string name, int value) => instance._LocalPlayerSetCP(name, value);
 
-    private bool _GetBoolLocalPlayerCP(string name) 
+    private bool _GetBoolLocalPlayerCP(string name)
     {
         var player = PhotonNetwork.LocalPlayer;
 
@@ -328,5 +338,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         return PlayerList;
     }
     public static List<string> GetPlayerList() => instance._GetPlayerList();
+
+    private void _ShareRoomSeatList()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            bool[] roomSeats = (bool[])PhotonNetwork.MasterClient.CustomProperties["RoomSeat"];
+            for (int i = 0; i < roomSeats.Length; i++) RoomSeatList.Add(roomSeats[i]);
+        }
+    }
+    [PunRPC]
+    private void _SeatRoomChageRPC(int index, bool value)
+    {
+        RoomSeatList[index] = value;
+    }
+    private void _SeatStateChange(int index, bool value) => pv.RPC("_SeatRoomChageRPC", RpcTarget.All, index, value);
+    public static void SeatStateChange(int index, bool value) => instance._SeatStateChange(index, value);
+
     #endregion
 }
