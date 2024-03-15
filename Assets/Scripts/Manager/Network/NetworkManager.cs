@@ -43,7 +43,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public bool HasSeat = false;
     public int SeatNum = 0;
 
-    public bool IsReady;
     #endregion
 
     #region # Unity_Function
@@ -90,7 +89,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster() => PhotonNetwork.JoinLobby();
     public override void OnJoinedLobby()
     {
-        Debug.Log("로비에 참가했습니다.");
 
     }
 
@@ -129,19 +127,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         UpdatePlayerList();
         LobbyManager.SetPlayerList(PlayerList);
 
-
-        LocalPlayerSetCP("Ready", false);
         LobbyManager.UIPresetMove(-3840, 0, 0.5f);
-
-        _ShareRoomSeatList();
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Debug.Log("방에 유저가 접속했습니다 !");
 
         UpdatePlayerList();
         LobbyManager.SetPlayerList(PlayerList);
-        if (PhotonNetwork.IsMasterClient) LobbyManager.RoomSeatCheck();
     }
     public override void OnLeftRoom()
     {
@@ -154,15 +146,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        Debug.Log("RoomListUpdate");
         RoomList = LobbyManager.RoomInfoToRoomData(roomList);
 
         LobbyManager.RoomListUpdate(RoomList);
-        foreach (var room in roomList) Debug.Log(room.Name);
     }
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        Debug.Log("OnPlayerPropertiesUpdate / targetPlayer : " + targetPlayer.NickName);
     }
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
     {

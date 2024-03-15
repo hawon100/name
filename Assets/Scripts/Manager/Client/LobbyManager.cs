@@ -28,7 +28,6 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI stateText;
     [SerializeField] private TextMeshProUGUI registerFailText;
     [SerializeField] private TextMeshProUGUI idText;
-    [SerializeField] private List<TextMeshProUGUI> readyTexts = new List<TextMeshProUGUI>();
 
     [Header("TMP_InputField")]
     [SerializeField] private TMP_InputField roomNameInputField;
@@ -52,8 +51,9 @@ public class LobbyManager : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private GameObject roomListPrefab;
 
-    [Header("List")]
+    [Header("Other")]
     [SerializeField] private List<GameObject> roomListObjects = new List<GameObject>();
+    [SerializeField] private List<RoomSeat> roomSeat = new List<RoomSeat>();
     #endregion
 
     #region # Unity_Function
@@ -115,7 +115,6 @@ public class LobbyManager : MonoBehaviour
 
     private void _RoomListUpdate(List<Data> roomDatas)
     {
-        Debug.Log("RoomListUpdate");
         RoomListReset();
 
         foreach (var data in roomDatas)
@@ -185,6 +184,5 @@ public class LobbyManager : MonoBehaviour
         UIPresetMove(-1920, 0, 0.5f);
     }
     public static void LoginComplete() => instance._LoginComplete();
-
     #endregion
 }
