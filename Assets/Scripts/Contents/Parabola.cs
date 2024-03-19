@@ -15,9 +15,8 @@ public class Parabola : MonoBehaviour
 {
     public static Parabola Instance {  get; private set; }
 
-    public Transform centerOfRotation;
-    public CameraPos camPos;
-    public float elapsedTime = 0.0f;
+    [SerializeField] private Transform centerOfRotation;
+    [SerializeField] private CameraPos camPos;
 
     private void Start()
     {
@@ -28,25 +27,39 @@ public class Parabola : MonoBehaviour
     {
         transform.LookAt(centerOfRotation.position);
 
-        if (Managers.Game.isS_posStay)
+        switch (Managers.Game.state)
         {
-            elapsedTime = 0.0f;
-            transform.position = Vector3.Slerp(transform.position, camPos.s_Pos.position, 0.03f);
+            case Define.PlayerState.S: PlayerPosClear(); DirectionMove(Define.PlayerState.S); DirectionRot(Define.PlayerState.S); break;
+            case Define.PlayerState.W: PlayerPosClear(); DirectionMove(Define.PlayerState.W); DirectionRot(Define.PlayerState.W); break;
+            case Define.PlayerState.N: PlayerPosClear(); DirectionMove(Define.PlayerState.N); DirectionRot(Define.PlayerState.N); break;
+            case Define.PlayerState.E: PlayerPosClear(); DirectionMove(Define.PlayerState.E); DirectionRot(Define.PlayerState.E); break;
         }
-        if (Managers.Game.isW_posStay)
+    }
+
+    void PlayerPosClear()
+    {
+        PlayerController.Instance.inputVec = Vector3.zero;
+    }
+
+    void DirectionMove(Define.PlayerState state)
+    {
+        switch (state)
         {
-            elapsedTime = 0.0f;
-            transform.position = Vector3.Slerp(transform.position, camPos.w_Pos.position, 0.03f);
+            case Define.PlayerState.S: PlayerController.Instance.inputVec.x = Input.GetAxisRaw("Horizontal_2"); break;
+            case Define.PlayerState.W: PlayerController.Instance.inputVec.z = Input.GetAxisRaw("Horizontal"); break;
+            case Define.PlayerState.N: PlayerController.Instance.inputVec.x = Input.GetAxisRaw("Horizontal"); break;
+            case Define.PlayerState.E: PlayerController.Instance.inputVec.z = Input.GetAxisRaw("Horizontal_2"); break;
         }
-        if (Managers.Game.isN_posStay)
+    }
+
+    void DirectionRot(Define.PlayerState state)
+    {
+        switch (state)
         {
-            elapsedTime = 0.0f;
-            transform.position = Vector3.Slerp(transform.position, camPos.n_Pos.position, 0.03f);
-        }
-        if (Managers.Game.isE_posStay)
-        {
-            elapsedTime = 0.0f;
-            transform.position = Vector3.Slerp(transform.position, camPos.e_Pos.position, 0.03f);
+            case Define.PlayerState.S: transform.position = Vector3.Slerp(transform.position, camPos.s_Pos.position, 0.03f); break;
+            case Define.PlayerState.W: transform.position = Vector3.Slerp(transform.position, camPos.w_Pos.position, 0.03f); break;
+            case Define.PlayerState.N: transform.position = Vector3.Slerp(transform.position, camPos.n_Pos.position, 0.03f); break;
+            case Define.PlayerState.E: transform.position = Vector3.Slerp(transform.position, camPos.e_Pos.position, 0.03f); break;
         }
     }
 }
