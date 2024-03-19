@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 
 [System.Serializable]
-public struct Data
+public class Data
 {
     public string Name;
 
@@ -14,14 +14,25 @@ public struct Data
 
     public bool IsVisible;
 }
-public class RoomData : MonoBehaviour 
+public class RoomData : MonoBehaviour
 {
     #region Variable
-    public Data data;
+    [SerializeField] private Data currentData;
+    public Data CurrentData
+    {
+        get { return currentData; }
+        set
+        {
+            currentData = value;
+            playerCount = currentData.PlayerCount;
+            if (currentData.PlayerCount <= 0) DestroyRoom();
+        }
+    }
+    private int playerCount;
 
     [SerializeField] private Button button;
 
-    [Header ("Text")]
+    [Header("Text")]
     [SerializeField] private TextMeshProUGUI roomNameText;
     [SerializeField] private TextMeshProUGUI playerCountText;
 
@@ -31,20 +42,26 @@ public class RoomData : MonoBehaviour
     private void Start()
     {
         button.onClick.AddListener(() => Join());
+
     }
     #endregion
 
     #region Function
-    private void _UISetting() 
+    private void _UISetting()
     {
-        roomNameText.text = "방 이름 : " + data.Name;
-        playerCountText.text = "인원 : " + data.PlayerCount + "/" + data.MaxPlayers;
+        roomNameText.text = "방 이름 : " + currentData.Name;
+        playerCountText.text = "인원 : " + currentData.PlayerCount + "/" + currentData.MaxPlayers;
 
-        Debug.Log("방 이름 : " + data.Name);
-        Debug.Log("인원 : " + data.PlayerCount + "/" + data.MaxPlayers);
+        Debug.Log("방 이름 : " + currentData.Name);
+        Debug.Log("인원 : " + currentData.PlayerCount + "/" + currentData.MaxPlayers);
     }
     public void UISetting() => _UISetting();
 
-    public void Join() => NetworkManager.JoinRoom(data.Name);
+    public void Join()
+    {
+        if (currentData.PlayerCount < currentData.MaxPlayers) NetworkManager.JoinRoom(currentData.Name);
+        else Debug.Log("방에 최대 인원이 채워져있습니다.");
+    }
+    public void DestroyRoom() => Destroy(gameObject);
     #endregion
 }

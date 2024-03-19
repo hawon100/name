@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 using DG.Tweening;
 using TMPro;
 public class LobbyManager : MonoBehaviour
 {
     public static LobbyManager instance;
 
+    public bool isLobby;
+
+    private PhotonView pv;
     #region # Variable
     [Header("Transform")]
     [SerializeField] private Transform roomListContent;
@@ -15,11 +19,16 @@ public class LobbyManager : MonoBehaviour
     [Header("Rect Transform")]
     [SerializeField] private RectTransform UIPreset;
 
+    [Header("Image")]
+    [SerializeField] private Image PlayerColorPreviewImage;
+    [SerializeField] private List<Image> playerImages = new List<Image>();
+
     [Header("TextMeshPro UGUI")]
     [SerializeField] private TextMeshProUGUI playerListText;
     [SerializeField] private TextMeshProUGUI stateText;
     [SerializeField] private TextMeshProUGUI registerFailText;
     [SerializeField] private TextMeshProUGUI idText;
+    [SerializeField] private List<TextMeshProUGUI> readyTexts = new List<TextMeshProUGUI>();
 
     [Header("TMP_InputField")]
     [SerializeField] private TMP_InputField roomNameInputField;
@@ -29,12 +38,16 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private TMP_InputField registerPassInputField;
 
     [Header("Button")]
-
     [SerializeField] private Button roomCreateBtn;
     [SerializeField] private Button loginBtn;
     [SerializeField] private Button loginEnterBtn;
     [SerializeField] private Button registerBtn;
     [SerializeField] private Button registerEngerBtn;
+    [SerializeField] private Button roomExitBtn;
+    [SerializeField] private Button PlayerColorRedBtn;
+    [SerializeField] private Button PlayerColorBlueBtn;
+    [SerializeField] private Button PlayerColorGreenBtn;
+    [SerializeField] private Button PlayerColorYellowBtn;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject roomListPrefab;
@@ -53,6 +66,8 @@ public class LobbyManager : MonoBehaviour
     {
         Screen.SetResolution(1920, 1080, FullScreenMode.Windowed);
 
+        pv = GetComponent<PhotonView>();
+
         loginBtn.onClick.AddListener(() => { UIPresetMove(0, 0, 0.5f); });
         loginEnterBtn.onClick.AddListener(() =>
         {
@@ -64,7 +79,18 @@ public class LobbyManager : MonoBehaviour
         registerBtn.onClick.AddListener(() => { UIPresetMove(0, 1080, 0.5f); });
         registerEngerBtn.onClick.AddListener(() => { GoogleSheetManager.Register(registerIdInputField.text, registerPassInputField.text); });
 
-        roomCreateBtn.onClick.AddListener(() => NetworkManager.CreateRoom(roomNameInputField.text, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 }));
+        roomCreateBtn.onClick.AddListener(() =>
+        {
+            NetworkManager.CreateRoom(roomNameInputField.text, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 });
+
+        });
+        roomExitBtn.onClick.AddListener(() => NetworkManager.ExitRoom());
+
+        PlayerColorRedBtn.onClick.AddListener(() => { PlayerColorPreviewImage.color = PlayerColorRedBtn.GetComponent<Image>().color; });
+        PlayerColorBlueBtn.onClick.AddListener(() => { PlayerColorPreviewImage.color = PlayerColorBlueBtn.GetComponent<Image>().color; });
+        PlayerColorGreenBtn.onClick.AddListener(() => { PlayerColorPreviewImage.color = PlayerColorGreenBtn.GetComponent<Image>().color; });
+        PlayerColorYellowBtn.onClick.AddListener(() => { PlayerColorPreviewImage.color = PlayerColorYellowBtn.GetComponent<Image>().color; });
+
     }
     private void Update()
     {
@@ -89,12 +115,14 @@ public class LobbyManager : MonoBehaviour
 
     private void _RoomListUpdate(List<Data> roomDatas)
     {
+        Debug.Log("RoomListUpdate");
         RoomListReset();
+
         foreach (var data in roomDatas)
         {
             RoomData roomData = Instantiate(roomListPrefab, roomListContent).GetComponent<RoomData>();
 
-            roomData.data = data;
+            roomData.CurrentData = data;
 
             roomListObjects.Add(roomData.gameObject);
         }
@@ -154,8 +182,9 @@ public class LobbyManager : MonoBehaviour
 
     private void _LoginComplete()
     {
-        UIPresetMove(-1920,0,0.5f);
+        UIPresetMove(-1920, 0, 0.5f);
     }
     public static void LoginComplete() => instance._LoginComplete();
+
     #endregion
 }
