@@ -17,6 +17,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public string PlayerNumCP = "";
 
     public List<string> PlayerList = new List<string>();
+    public List<Data> RoomList = new List<Data>();
     #endregion
 
     #region # Unity_Function
@@ -53,6 +54,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     public override void OnConnected() => LobbyManager.SetState("연결 되었습니다 !");
+    public override void OnConnectedToMaster() => PhotonNetwork.JoinLobby();
+    public override void OnJoinedLobby() => LobbyManager.SetState("로비에 참가했습니다 !");
+
     public override void OnCreatedRoom()
     {
         LobbyManager.SetState("방을 생성했습니다 ! / " + CurrentRoomName);
@@ -67,7 +71,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient)
         {
-
             PlayerNumCP = CurrentRoomName + "_roomPlayerNum";
             _CurrentRoomSetCP(PlayerNumCP, roomPlayerNum);
 
@@ -76,12 +79,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         else
         {
             roomPlayerNum += 1;
-
             PlayerNum = (int)roomPlayerNum;
         }
 
         UpdatePlayerList();
         LobbyManager.SetPlayerList(PlayerList);
+
+        LobbyManager.UIPresetMove(-3840, 0, 0.5f);
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
@@ -94,6 +98,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         CurrentRoomName = "";
         PlayerNumCP = "";
+    }
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        RoomList = LobbyManager.RoomInfoToRoomData(roomList);
+
+        LobbyManager.RoomListUpdate(RoomList);
     }
 
     private void _CurrentRoomSetCP(string name, float value) // 선택된 방에 Custom Property를 추가합니다. (float) 

@@ -9,21 +9,38 @@ public class LobbyManager : MonoBehaviour
     public static LobbyManager instance;
 
     #region # Variable
+    [Header("Transform")]
+    [SerializeField] private Transform roomListContent;
+
     [Header("Rect Transform")]
     [SerializeField] private RectTransform UIPreset;
 
     [Header("TextMeshPro UGUI")]
     [SerializeField] private TextMeshProUGUI playerListText;
     [SerializeField] private TextMeshProUGUI stateText;
+    [SerializeField] private TextMeshProUGUI registerFailText;
+    [SerializeField] private TextMeshProUGUI idText;
 
     [Header("TMP_InputField")]
-    [SerializeField] private TMP_InputField nameInputField;
     [SerializeField] private TMP_InputField roomNameInputField;
+    [SerializeField] private TMP_InputField loginIdInputField;
+    [SerializeField] private TMP_InputField loginPassInputField;
+    [SerializeField] private TMP_InputField registerIdInputField;
+    [SerializeField] private TMP_InputField registerPassInputField;
 
     [Header("Button")]
-    [SerializeField] private Button nameEnterBtn;
+
     [SerializeField] private Button roomCreateBtn;
-    [SerializeField] private Button roomJoindBtn;
+    [SerializeField] private Button loginBtn;
+    [SerializeField] private Button loginEnterBtn;
+    [SerializeField] private Button registerBtn;
+    [SerializeField] private Button registerEngerBtn;
+
+    [Header("Prefabs")]
+    [SerializeField] private GameObject roomListPrefab;
+
+    [Header("List")]
+    [SerializeField] private List<GameObject> roomListObjects = new List<GameObject>();
     #endregion
 
     #region # Unity_Function
@@ -31,18 +48,23 @@ public class LobbyManager : MonoBehaviour
     {
         if (instance == null) instance = this;
         else Destroy(gameObject);
-
     }
     private void Start()
     {
-        nameEnterBtn.onClick.AddListener(() =>
+        Screen.SetResolution(1920, 1080, FullScreenMode.Windowed);
+
+        loginBtn.onClick.AddListener(() => { UIPresetMove(0, 0, 0.5f); });
+        loginEnterBtn.onClick.AddListener(() =>
         {
-            NetworkManager.SetNickName(nameInputField.text);
-            //UIPreset.DOLocalMoveX(-1920, 0.5f).SetEase(Ease.OutQuad);
+            GoogleSheetManager.Login(loginIdInputField.text, loginPassInputField.text);
+            NetworkManager.SetNickName(loginIdInputField.text);
+            idText.text = loginIdInputField.text + "님! 환영합니다!";
         });
 
+        registerBtn.onClick.AddListener(() => { UIPresetMove(0, 1080, 0.5f); });
+        registerEngerBtn.onClick.AddListener(() => { GoogleSheetManager.Register(registerIdInputField.text, registerPassInputField.text); });
+
         roomCreateBtn.onClick.AddListener(() => NetworkManager.CreateRoom(roomNameInputField.text, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 }));
-        roomJoindBtn.onClick.AddListener(() => NetworkManager.JoinRoom(roomNameInputField.text));
     }
     private void Update()
     {
@@ -51,6 +73,9 @@ public class LobbyManager : MonoBehaviour
     #endregion
 
     #region # Function
+    private void _UIPresetMove(float x, float y, float time) => UIPreset.DOLocalMove(new Vector3(x, y), time).SetEase(Ease.OutQuad);
+    public static void UIPresetMove(float x, float y, float time) => instance._UIPresetMove(x, y, time);
+
     private void _SetState(string state) => stateText.text = state;
     public static void SetState(string state) => instance._SetState(state);
 
@@ -61,5 +86,76 @@ public class LobbyManager : MonoBehaviour
         foreach (var item in playerList) playerListText.text += ("\n" + item);
     }
     public static void SetPlayerList(List<string> playerList) => instance._SetPlayerList(playerList);
+
+    private void _RoomListUpdate(List<Data> roomDatas)
+    {
+        RoomListReset();
+        foreach (var data in roomDatas)
+        {
+            RoomData roomData = Instantiate(roomListPrefab, roomListContent).GetComponent<RoomData>();
+
+            roomData.data = data;
+
+            roomListObjects.Add(roomData.gameObject);
+        }
+
+        foreach (var item in roomListObjects)
+        {
+            RoomData roomData = item.GetComponent<RoomData>();
+            roomData.UISetting();
+        }
+    }
+    public static void RoomListUpdate(List<Data> roomDatas) => instance._RoomListUpdate(roomDatas);
+
+    private void _RoomListReset()
+    {
+        foreach (var item in roomListObjects) Destroy(item);
+        roomListObjects.Clear();
+    }
+    public static void RoomListReset() => instance._RoomListReset();
+
+    private List<Data> _RoomInfoToRoomData(List<Photon.Realtime.RoomInfo> roomInfos)
+    {
+        List<Data> roomDataList = new List<Data>();
+
+        foreach (var roomInfo in roomInfos)
+        {
+            Data roomData = new Data()
+            {
+                Name = roomInfo.Name,
+                IsVisible = roomInfo.IsVisible,
+                MaxPlayers = roomInfo.MaxPlayers,
+                PlayerCount = roomInfo.PlayerCount,
+            };
+
+            roomDataList.Add(roomData);
+        }
+
+        return roomDataList;
+    }
+    public static List<Data> RoomInfoToRoomData(List<Photon.Realtime.RoomInfo> roomInfos) => instance._RoomInfoToRoomData(roomInfos);
+
+    private IEnumerator _SetVisibleUI(GameObject obj, float time)
+    {
+        obj.SetActive(true);
+        yield return new WaitForSeconds(time);
+        obj.SetActive(false);
+    }
+
+    public static void RegisterFailVisible(string text, float time)
+    {
+        instance.registerFailText.text = text;
+
+        var obj = instance.registerFailText.gameObject;
+
+        instance.StopAllCoroutines();
+        instance.StartCoroutine(instance._SetVisibleUI(obj, time));
+    }
+
+    private void _LoginComplete()
+    {
+        UIPresetMove(-1920,0,0.5f);
+    }
+    public static void LoginComplete() => instance._LoginComplete();
     #endregion
 }
