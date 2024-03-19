@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Billboarding : MonoBehaviour
 {
-    Vector3 _cameraDir;
+    private Vector3 _cameraDir;
 
     private void Update()
     {
