@@ -28,7 +28,6 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI stateText;
     [SerializeField] private TextMeshProUGUI registerFailText;
     [SerializeField] private TextMeshProUGUI idText;
-    [SerializeField] private List<TextMeshProUGUI> readyTexts = new List<TextMeshProUGUI>();
 
     [Header("TMP_InputField")]
     [SerializeField] private TMP_InputField roomNameInputField;
@@ -52,7 +51,7 @@ public class LobbyManager : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private GameObject roomListPrefab;
 
-    [Header("List")]
+    [Header("Other")]
     [SerializeField] private List<GameObject> roomListObjects = new List<GameObject>();
     #endregion
 
@@ -73,7 +72,7 @@ public class LobbyManager : MonoBehaviour
         {
             GoogleSheetManager.Login(loginIdInputField.text, loginPassInputField.text);
             NetworkManager.SetNickName(loginIdInputField.text);
-            idText.text = loginIdInputField.text + "´Ô! È¯¿µÇÕ´Ï´Ù!";
+            idText.text = loginIdInputField.text + "ë‹˜ í™˜ì˜í•©ë‹ˆë‹¤!";
         });
 
         registerBtn.onClick.AddListener(() => { UIPresetMove(0, 1080, 0.5f); });
@@ -115,7 +114,6 @@ public class LobbyManager : MonoBehaviour
 
     private void _RoomListUpdate(List<Data> roomDatas)
     {
-        Debug.Log("RoomListUpdate");
         RoomListReset();
 
         foreach (var data in roomDatas)
@@ -185,6 +183,5 @@ public class LobbyManager : MonoBehaviour
         UIPresetMove(-1920, 0, 0.5f);
     }
     public static void LoginComplete() => instance._LoginComplete();
-
     #endregion
 }
