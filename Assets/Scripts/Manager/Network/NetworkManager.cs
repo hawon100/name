@@ -11,7 +11,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public static NetworkManager instance;
 
     private PhotonView pv;
-
     public string NickName;
     public int PlayerNum = 0;
 
@@ -85,7 +84,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         else PhotonNetwork.LeaveRoom(true);
     }
 
-    public override void OnConnected() => LobbyManager.SetState("¿¬°á µÇ¾ú½À´Ï´Ù !");
+    public override void OnConnected() => LobbyManager.SetState("ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ !");
     public override void OnConnectedToMaster() => PhotonNetwork.JoinLobby();
     public override void OnJoinedLobby()
     {
@@ -94,7 +93,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnCreatedRoom()
     {
-        Debug.Log("¹æÀ» »ý¼ºÇß½À´Ï´Ù ! / " + CurrentRoomName);
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½ ! / " + CurrentRoomName);
         if (PhotonNetwork.IsMasterClient)
         {
             for (int i = 0; i < 4; i++) RoomSeatList.Add(false);
@@ -106,7 +105,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
     public override void OnJoinedRoom()
     {
-        LobbyManager.SetState("¹æ¿¡ Âü°¡Çß½À´Ï´Ù ! / " + CurrentRoomName);
+        LobbyManager.SetState("ï¿½æ¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½ ! / " + CurrentRoomName);
 
         float roomPlayerNum = 1;
 
@@ -158,7 +157,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("OnRoomPropertiesUpdate");
     }
 
-    private void _CurrentRoomSetCP(string name, float value) // ¼±ÅÃµÈ ¹æ¿¡ Custom Property¸¦ Ãß°¡ÇÕ´Ï´Ù. (float) 
+    private void _CurrentRoomSetCP(string name, float value) // ï¿½ï¿½ï¿½Ãµï¿½ ï¿½æ¿¡ Custom Propertyï¿½ï¿½ ï¿½ß°ï¿½ï¿½Õ´Ï´ï¿½. (float) 
     {
         var currentRoom = PhotonNetwork.CurrentRoom;
 
@@ -169,7 +168,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             currentRoom.SetCustomProperties(ht);
         }
     }
-    private void _CurrentRoomSetCP(string name, string value) // ¼±ÅÃµÈ ¹æ¿¡ Custom Property¸¦ Ãß°¡ÇÕ´Ï´Ù. (string) 
+    private void _CurrentRoomSetCP(string name, string value) // ï¿½ï¿½ï¿½Ãµï¿½ ï¿½æ¿¡ Custom Propertyï¿½ï¿½ ï¿½ß°ï¿½ï¿½Õ´Ï´ï¿½. (string) 
     {
         var currentRoom = PhotonNetwork.CurrentRoom;
 
@@ -316,7 +315,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.NickName = name;
         NickName = PhotonNetwork.LocalPlayer.NickName;
     }
-    public static void SetNickName(string name) => instance._SetNickName(name); // LocalPlayerÀÇ ´Ð³×ÀÓÀ» ¼³Á¤ÇÕ´Ï´Ù.
+    public static void SetNickName(string name) => instance._SetNickName(name); // LocalPlayerï¿½ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
 
     private void _UpdatePlayerList()
     {

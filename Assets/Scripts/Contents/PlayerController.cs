@@ -12,10 +12,6 @@ public class PlayerPos
     public Transform e_Pos;
 }
 
-public enum PlayerState
-{
-    S,W,N,E
-}
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody _rigid;
@@ -49,34 +45,22 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("S_Pos"))
         {
-            Managers.Game.isS_posStay = true;
-            Managers.Game.isW_posStay = false;
-            Managers.Game.isN_posStay = false;
-            Managers.Game.isE_posStay = false;
+            Managers.Game.cameraDirection = CameraDirection.S;
             //transform.position = pos.s_Pos.position;
         }
         if (other.CompareTag("W_Pos"))
         {
-            Managers.Game.isS_posStay = false;
-            Managers.Game.isW_posStay = true;
-            Managers.Game.isN_posStay = false;
-            Managers.Game.isE_posStay = false;
+            Managers.Game.cameraDirection = CameraDirection.W;
             //transform.position = pos.w_Pos.position;
         }
         if (other.CompareTag("N_Pos"))
         {
-            Managers.Game.isS_posStay = false;
-            Managers.Game.isW_posStay = false;
-            Managers.Game.isN_posStay = true;
-            Managers.Game.isE_posStay = false;
+            Managers.Game.cameraDirection = CameraDirection.N;
             //transform.position = pos.n_Pos.position;
         }
         if (other.CompareTag("E_Pos"))
         {
-            Managers.Game.isS_posStay = false;
-            Managers.Game.isW_posStay = false;
-            Managers.Game.isN_posStay = false;
-            Managers.Game.isE_posStay = true;
+            Managers.Game.cameraDirection = CameraDirection.E;
             //transform.position = pos.e_Pos.position;
         }
     }

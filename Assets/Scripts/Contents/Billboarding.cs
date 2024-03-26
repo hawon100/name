@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class Billboarding : MonoBehaviour
 {
-    Vector3 _cameraDir;
+    public Camera m_MainCamera;
+    Quaternion m_OriginalRotation;
 
-    private void Update()
+    void Start()
     {
-        _cameraDir = Camera.main.transform.forward;
-        _cameraDir.y = 0;
+        m_MainCamera= Camera.main;
+        m_OriginalRotation = transform.rotation;
+    }
 
-        transform.rotation = Quaternion.LookRotation(_cameraDir);
+    void Update()
+    {
+        transform.rotation 
+            = m_MainCamera.transform.rotation * m_OriginalRotation;
     }
 }

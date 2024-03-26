@@ -53,7 +53,6 @@ public class LobbyManager : MonoBehaviour
 
     [Header("Other")]
     [SerializeField] private List<GameObject> roomListObjects = new List<GameObject>();
-    [SerializeField] private List<RoomSeat> roomSeat = new List<RoomSeat>();
     #endregion
 
     #region # Unity_Function
@@ -73,7 +72,7 @@ public class LobbyManager : MonoBehaviour
         {
             GoogleSheetManager.Login(loginIdInputField.text, loginPassInputField.text);
             NetworkManager.SetNickName(loginIdInputField.text);
-            idText.text = loginIdInputField.text + "´Ô! È¯¿µÇÕ´Ï´Ù!";
+            idText.text = loginIdInputField.text + "ë‹˜ í™˜ì˜í•©ë‹ˆë‹¤!";
         });
 
         registerBtn.onClick.AddListener(() => { UIPresetMove(0, 1080, 0.5f); });
