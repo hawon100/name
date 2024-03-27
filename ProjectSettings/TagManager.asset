@@ -8,6 +8,7 @@ TagManager:
   - W_Pos
   - N_Pos
   - E_Pos
+  - Ground
   layers:
   - Default
   - TransparentFX

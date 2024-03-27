@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d9ef7274b8f023644a04c2419c996aa6
+guid: 6e8fdcbfef9cb714da8cc0b1fe4bbbc7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 25
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -105,13 +105,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Player_Anim_0
+      name: CHAR_DESIGN-02-waiting2-Sheet_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 60
-        height: 40
+        width: 160
+        height: 160
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -119,20 +119,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aaa912462366a4440a9fdf064aa7b56c
-      internalID: -557540972
+      spriteID: c3229c269f6e1714d89eac00646aa06f
+      internalID: 800750346
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player_Anim_1
+      name: CHAR_DESIGN-02-waiting2-Sheet_1
       rect:
         serializedVersion: 2
-        x: 60
+        x: 160
         y: 0
-        width: 60
-        height: 40
+        width: 160
+        height: 160
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,20 +140,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6330b8af72e7e394f85b63b46072a1a7
-      internalID: -2049303996
+      spriteID: 7d2e4d3b63e289f44be9cf4e5336861f
+      internalID: 774634140
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player_Anim_2
+      name: CHAR_DESIGN-02-waiting2-Sheet_2
       rect:
         serializedVersion: 2
-        x: 120
+        x: 320
         y: 0
-        width: 60
-        height: 40
+        width: 160
+        height: 160
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -161,20 +161,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ba43c41d4902b9e45801e16b30ca74ef
-      internalID: -127245519
+      spriteID: 66b791fa38a46cf45ad991bb9fec4542
+      internalID: 1873363205
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player_Anim_3
+      name: CHAR_DESIGN-02-waiting2-Sheet_3
       rect:
         serializedVersion: 2
-        x: 180
+        x: 480
         y: 0
-        width: 60
-        height: 40
+        width: 160
+        height: 160
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -182,92 +182,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bae95b1d487c9124fa4e73f4b025983b
-      internalID: 1403274635
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Player_Anim_4
-      rect:
-        serializedVersion: 2
-        x: 240
-        y: 0
-        width: 60
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: abf8397b24a859a4e9ca75e47d72cbbb
-      internalID: -511234111
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Player_Anim_5
-      rect:
-        serializedVersion: 2
-        x: 300
-        y: 0
-        width: 60
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: afede371ddf26d54f82ed63b45a0121c
-      internalID: 652765416
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Player_Anim_6
-      rect:
-        serializedVersion: 2
-        x: 360
-        y: 0
-        width: 60
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d5efda9d78b458a4e892f9b9a5349501
-      internalID: -201613486
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Player_Anim_7
-      rect:
-        serializedVersion: 2
-        x: 420
-        y: 0
-        width: 60
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bf210e06444d1664892a5f234bd2aca2
-      internalID: 589652687
+      spriteID: 19e571a6f44647c40a633141552e02e7
+      internalID: -1372268265
       vertices: []
       indices: 
       edges: []
@@ -275,7 +191,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 3b94476d4c825de46aae577f3644557d
     internalID: 0
     vertices: []
     indices: 
@@ -283,14 +199,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Player_Anim_0: -557540972
-      Player_Anim_1: -2049303996
-      Player_Anim_2: -127245519
-      Player_Anim_3: 1403274635
-      Player_Anim_4: -511234111
-      Player_Anim_5: 652765416
-      Player_Anim_6: -201613486
-      Player_Anim_7: 589652687
+      CHAR_DESIGN-02-waiting2-Sheet_0: 800750346
+      CHAR_DESIGN-02-waiting2-Sheet_1: 774634140
+      CHAR_DESIGN-02-waiting2-Sheet_2: 1873363205
+      CHAR_DESIGN-02-waiting2-Sheet_3: -1372268265
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -47,10 +47,26 @@ public class CameraRotate : MonoBehaviour
     {
         switch (cameraDirection)
         {
-            case CameraDirection.S: transform.DOMove(south.position, 1).SetEase(Ease.OutQuad); transform.DORotate(south.eulerAngles, 1).OnComplete(() => isRotate = false); break;
-            case CameraDirection.W: transform.DOMove(west.position, 1).SetEase(Ease.OutQuad); transform.DORotate(west.eulerAngles, 1).OnComplete(() => isRotate = false); break;
-            case CameraDirection.E: transform.DOMove(east.position, 1).SetEase(Ease.OutQuad); transform.DORotate(east.eulerAngles, 1).OnComplete(() => isRotate = false); break;
-            case CameraDirection.N: transform.DOMove(north.position, 1).SetEase(Ease.OutQuad); transform.DORotate(north.eulerAngles, 1).OnComplete(() => isRotate = false); break;
+            case CameraDirection.S:
+                transform.DOMoveX(south.position.x, 1).SetEase(Ease.OutQuad);
+                transform.DOMoveZ(south.position.z, 1).SetEase(Ease.OutQuad);
+                transform.DORotate(south.eulerAngles, 1).OnComplete(() => isRotate = false);
+                break;
+            case CameraDirection.W:
+                transform.DOMoveX(west.position.x, 1).SetEase(Ease.OutQuad);
+                transform.DOMoveZ(west.position.z, 1).SetEase(Ease.OutQuad);
+                transform.DORotate(west.eulerAngles, 1).OnComplete(() => isRotate = false);
+                break;
+            case CameraDirection.E:
+                transform.DOMoveX(east.position.x, 1).SetEase(Ease.OutQuad);
+                transform.DOMoveZ(east.position.z, 1).SetEase(Ease.OutQuad);
+                transform.DORotate(east.eulerAngles, 1).OnComplete(() => isRotate = false);
+                break;
+            case CameraDirection.N:
+                transform.DOMoveX(north.position.x, 1).SetEase(Ease.OutQuad);
+                transform.DOMoveZ(north.position.z, 1).SetEase(Ease.OutQuad);
+                transform.DORotate(north.eulerAngles, 1).OnComplete(() => isRotate = false);
+                break;
         }
     }
     #endregion
@@ -64,6 +80,8 @@ public class CameraRotate : MonoBehaviour
     private void Update()
     {
         _ChangeDirection();
+        float y = GameManager.instance.playerObject.transform.position.y;
+        transform.position = new Vector3(transform.position.x, y, transform.position.z);
     }
     #endregion
 }
