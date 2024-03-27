@@ -80,7 +80,7 @@ public class CameraRotate : MonoBehaviour
     private void Update()
     {
         _ChangeDirection();
-        float y = GameManager.instance.playerObject.transform.position.y;
+        float y = GameManager.instance.playerObject.transform.position.y + 1;
         transform.position = new Vector3(transform.position.x, y, transform.position.z);
     }
     #endregion
