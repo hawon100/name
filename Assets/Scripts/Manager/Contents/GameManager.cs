@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public enum CameraDirection
@@ -15,6 +16,9 @@ public class GameManager : MonoBehaviour
     public GameObject playerObject;
 
     public CameraDirection cameraDirection;
+
+    [Header("Prefabs")]
+    [SerializeField] private GameObject playerPrefab;
     #endregion
 
     #region Unity_Function
@@ -22,6 +26,11 @@ public class GameManager : MonoBehaviour
     {
         if (instance == null) instance = this;
         else Destroy(gameObject);
+    }
+
+    private void Start()
+    {
+        playerObject = PhotonNetwork.Instantiate("Player", new Vector3(0, 1, -4.5f), Quaternion.identity);
     }
 
     #endregion

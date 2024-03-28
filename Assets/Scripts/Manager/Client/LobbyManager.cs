@@ -47,6 +47,7 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private Button PlayerColorBlueBtn;
     [SerializeField] private Button PlayerColorGreenBtn;
     [SerializeField] private Button PlayerColorYellowBtn;
+    [SerializeField] private Button startBtn;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject roomListPrefab;
@@ -64,6 +65,8 @@ public class LobbyManager : MonoBehaviour
     private void Start()
     {
         Screen.SetResolution(1920, 1080, FullScreenMode.Windowed);
+
+        PhotonNetwork.AutomaticallySyncScene = true;
 
         pv = GetComponent<PhotonView>();
 
@@ -84,6 +87,8 @@ public class LobbyManager : MonoBehaviour
 
         });
         roomExitBtn.onClick.AddListener(() => NetworkManager.ExitRoom());
+
+        startBtn.onClick.AddListener(() =>  PhotonNetwork.LoadLevel("InGame"));
 
         PlayerColorRedBtn.onClick.AddListener(() => { PlayerColorPreviewImage.color = PlayerColorRedBtn.GetComponent<Image>().color; });
         PlayerColorBlueBtn.onClick.AddListener(() => { PlayerColorPreviewImage.color = PlayerColorBlueBtn.GetComponent<Image>().color; });
@@ -183,5 +188,11 @@ public class LobbyManager : MonoBehaviour
         UIPresetMove(-1920, 0, 0.5f);
     }
     public static void LoginComplete() => instance._LoginComplete();
+
+    private void _SetMasterClient()
+    {
+        startBtn.gameObject.SetActive(true);
+    }
+    public static void SetMasterClient() => instance._SetMasterClient();
     #endregion
 }

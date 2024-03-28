@@ -1872,12 +1872,12 @@ GameObject:
   - component: {fileID: 506178168}
   - component: {fileID: 506178167}
   m_Layer: 5
-  m_Name: Ready Btn
+  m_Name: Start Btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &506178167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2121,7 +2121,6 @@ GameObject:
   m_Component:
   - component: {fileID: 627774735}
   - component: {fileID: 627774734}
-  - component: {fileID: 627774736}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -2165,28 +2164,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &627774736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 627774733}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 1
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!1 &651321177
 GameObject:
   m_ObjectHideFlags: 0
@@ -6658,7 +6635,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC900\uBE44"
+  m_text: "\uC2DC\uC791\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2533cb9fc11e2c640853166f468e47e5, type: 2}
   m_sharedMaterial: {fileID: -1282093078644224198, guid: 2533cb9fc11e2c640853166f468e47e5, type: 2}
@@ -7064,6 +7041,7 @@ MonoBehaviour:
   PlayerColorBlueBtn: {fileID: 492091140}
   PlayerColorGreenBtn: {fileID: 1236905272}
   PlayerColorYellowBtn: {fileID: 880877473}
+  startBtn: {fileID: 506178167}
   roomListPrefab: {fileID: 2822052164138003067, guid: da17acbac5bda744b805ac2e15579498, type: 3}
   roomListObjects: []
 --- !u!114 &2038731830

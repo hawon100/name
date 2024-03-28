@@ -115,7 +115,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             _CurrentRoomSetCP(PlayerNumCP, roomPlayerNum);
 
             PlayerNum = (int)roomPlayerNum;
-
+            LobbyManager.SetMasterClient();
         }
         else
         {
