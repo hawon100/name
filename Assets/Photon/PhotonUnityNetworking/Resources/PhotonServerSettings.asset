@@ -45,6 +45,7 @@ MonoBehaviour:
   - _TextUpdateRPC
   - _SeatInfoShare
   - _Flip
+  - _SetNameText
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

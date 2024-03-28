@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public GameObject playerObject;
+    public PlayerMove currentPlayer;
 
     public CameraDirection cameraDirection;
 
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         playerObject = PhotonNetwork.Instantiate("Player", new Vector3(0, 1, -4.5f), Quaternion.identity);
+        currentPlayer = playerObject.GetComponent<PlayerMove>();
     }
 
     #endregion

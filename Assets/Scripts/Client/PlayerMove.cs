@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Realtime;
+using Unity.VisualScripting;
 using UnityEngine;
+using TMPro;
 
-public class PlayerMove : MonoBehaviour
+public class PlayerMove : MonoBehaviour, IPunObservable
 {
     #region Variable
 
@@ -15,6 +18,8 @@ public class PlayerMove : MonoBehaviour
 
     private CameraRotate cameraRotate;
 
+    [SerializeField] private TextMeshPro nameText;
+
     [Header("Animation Value")]
     [SerializeField] private int idleCount = 0;
     [SerializeField] private float inputValue = 0;
@@ -25,6 +30,9 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float jumpPower;
     [SerializeField] private int curJumpCount = 0;
     [SerializeField] private int maxJumpCount = 2;
+
+    [Header("Player Info")]
+    public string playerName = "";
     #endregion
 
     #region Unity_Function
@@ -36,6 +44,9 @@ public class PlayerMove : MonoBehaviour
         pv = GetComponent<PhotonView>();
 
         cameraRotate = Camera.main.GetComponent<CameraRotate>();
+
+        nameText.text = pv.IsMine ? PhotonNetwork.NickName : pv.Owner.NickName;
+        nameText.color = pv.IsMine ? Color.green : Color.red;
     }
 
     private void Update()
@@ -56,6 +67,10 @@ public class PlayerMove : MonoBehaviour
     private void OnCollisionExit(Collision other)
     {
         if (other.gameObject.CompareTag("Ground")) isGround = false;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
     }
     #endregion
 
@@ -106,7 +121,7 @@ public class PlayerMove : MonoBehaviour
     {
         if (pv.IsMine)
         {
-            if (inputValue != 0) animator.SetBool("IsWalk", true);
+            if (inputValue != 0 && isGround) animator.SetBool("IsWalk", true);
             else animator.SetBool("IsWalk", false);
 
             if (idleCount == 10)
@@ -123,10 +138,11 @@ public class PlayerMove : MonoBehaviour
     [PunRPC]
     private void _Flip(float input)
     {
-         if (input < 0) spriteRenderer.flipX = true;
-            else if (input > 0) spriteRenderer.flipX = false;
+        if (input < 0) spriteRenderer.flipX = true;
+        else if (input > 0) spriteRenderer.flipX = false;
     }
 
     private void _IdleCount() => idleCount++;
+
     #endregion
 }
