@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
@@ -7,6 +8,7 @@ public class PlayerMove : MonoBehaviour
     #region Variable
 
     [Header("Component")]
+    private PhotonView pv;
     private Rigidbody rb;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
@@ -16,6 +18,7 @@ public class PlayerMove : MonoBehaviour
     [Header("Animation Value")]
     [SerializeField] private int idleCount = 0;
     [SerializeField] private float inputValue = 0;
+    [SerializeField] private bool isGround;
 
     [Header("Player Stat")]
     [SerializeField] private float moveSpeed;
@@ -27,10 +30,12 @@ public class PlayerMove : MonoBehaviour
     #region Unity_Function
     private void Start()
     {
-        cameraRotate = Camera.main.GetComponent<CameraRotate>();
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        pv = GetComponent<PhotonView>();
+
+        cameraRotate = Camera.main.GetComponent<CameraRotate>();
     }
 
     private void Update()
@@ -42,7 +47,15 @@ public class PlayerMove : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("Ground")) curJumpCount = maxJumpCount;
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            curJumpCount = maxJumpCount;
+            isGround = true;
+        }
+    }
+    private void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.CompareTag("Ground")) isGround = false;
     }
     #endregion
 
@@ -79,6 +92,7 @@ public class PlayerMove : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && curJumpCount > 0)
         {
             rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+            animator.SetTrigger("Jump");
             curJumpCount--;
         }
     }
@@ -93,6 +107,9 @@ public class PlayerMove : MonoBehaviour
             animator.SetTrigger("Sigh");
             idleCount = 0;
         }
+
+        if(!isGround) animator.SetBool("IsFall", true);
+        else animator.SetBool("IsFall", false);
     }
 
     private void _IdleCount() => idleCount++;

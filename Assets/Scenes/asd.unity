@@ -636,6 +636,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   idleCount: 0
   inputValue: 0
+  isGround: 0
   moveSpeed: 5
   jumpPower: 5
   curJumpCount: 0
