@@ -9,6 +9,9 @@ TagManager:
   - N_Pos
   - E_Pos
   - Ground
+  - MyPlayer
+  - MyAttack
+  - Attack
   layers:
   - Default
   - TransparentFX
@@ -19,10 +22,10 @@ TagManager:
   - 
   - 
   - Platform
-  - 
-  - 
-  - 
-  - 
+  - Attack
+  - Player
+  - MyPlayer
+  - MyAttack
   - 
   - 
   - 

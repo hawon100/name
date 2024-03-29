@@ -226,6 +226,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         return (int)currentRoom.CustomProperties[name];
     }
+    
     public static bool CurrentBoolRoomGetCP(string name) => instance._CurrentBoolRoomGetCP(name);
     public static int CurrentIntRoomGetCP(string name) => instance._CurrentIntRoomGetCP(name);
 

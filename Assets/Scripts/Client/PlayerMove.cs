@@ -5,6 +5,7 @@ using Photon.Realtime;
 using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
+using Photon.Pun.Demo.Cockpit;
 
 public class PlayerMove : MonoBehaviour, IPunObservable
 {
@@ -18,7 +19,12 @@ public class PlayerMove : MonoBehaviour, IPunObservable
 
     private CameraRotate cameraRotate;
 
+    [SerializeField] private Transform rangedAttackPos;
+
     [SerializeField] private TextMeshPro nameText;
+
+    [Header("Prefab")]
+    [SerializeField] private GameObject fireBallPrefab;
 
     [Header("Animation Value")]
     [SerializeField] private int idleCount = 0;
@@ -31,6 +37,8 @@ public class PlayerMove : MonoBehaviour, IPunObservable
     [SerializeField] private int curJumpCount = 0;
     [SerializeField] private int maxJumpCount = 2;
 
+    public bool canMeleeAttack = true;
+
     [Header("Player Info")]
     public string playerName = "";
     #endregion
@@ -38,6 +46,8 @@ public class PlayerMove : MonoBehaviour, IPunObservable
     #region Unity_Function
     private void Start()
     {
+        gameObject.layer = 11;
+
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -54,6 +64,8 @@ public class PlayerMove : MonoBehaviour, IPunObservable
         _Move();
         _Anim();
         _Jump();
+
+        _MeleeAttack();
     }
 
     private void OnCollisionEnter(Collision other)
@@ -132,6 +144,26 @@ public class PlayerMove : MonoBehaviour, IPunObservable
 
             if (!isGround) animator.SetBool("IsFall", true);
             else animator.SetBool("IsFall", false);
+        }
+    }
+
+    private void _MeleeAttack()
+    {
+        if (Input.GetKeyDown(KeyCode.F) && canMeleeAttack)
+        {
+            canMeleeAttack = false;
+            animator.SetTrigger("MeleeAttack");
+        }
+    }
+
+    private void MeleeAttack()
+    {
+        GameObject obj = PhotonNetwork.Instantiate("Melee_Fire", transform.position, Quaternion.identity);
+
+        if (obj.TryGetComponent(out MeleeFire meleeFire))
+        {
+            meleeFire.IsFlip = spriteRenderer.flipX;
+            meleeFire.Damage = 1;
         }
     }
 
