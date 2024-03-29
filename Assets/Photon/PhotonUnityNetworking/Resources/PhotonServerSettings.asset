@@ -46,6 +46,8 @@ MonoBehaviour:
   - _SeatInfoShare
   - _Flip
   - _SetNameText
+  - _SetParticleSystem
+  - _MeleeAttackRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

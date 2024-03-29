@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5560204000794020064}
   - component: {fileID: 5560204000794020067}
   - component: {fileID: -6217467148190314354}
+  - component: {fileID: -7333199370598992790}
   m_Layer: 0
   m_Name: Melee_Fire
   m_TagString: Untagged
@@ -4903,7 +4904,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: -7333199370598992790}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -4934,3 +4936,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsFlip: 0
   Damage: 0
+  usePlayer: {fileID: 0}
+--- !u!114 &-7333199370598992790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5560204000794020066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1

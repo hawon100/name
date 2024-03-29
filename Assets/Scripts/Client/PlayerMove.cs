@@ -19,6 +19,7 @@ public class PlayerMove : MonoBehaviour, IPunObservable
 
     private CameraRotate cameraRotate;
 
+
     [SerializeField] private Transform rangedAttackPos;
 
     [SerializeField] private TextMeshPro nameText;
@@ -36,11 +37,13 @@ public class PlayerMove : MonoBehaviour, IPunObservable
     [SerializeField] private float jumpPower;
     [SerializeField] private int curJumpCount = 0;
     [SerializeField] private int maxJumpCount = 2;
-
-    public bool canMeleeAttack = true;
+    [SerializeField] private bool canMeleeAttack = true;
 
     [Header("Player Info")]
     public string playerName = "";
+
+    [Header ("Attack Object")]
+    [SerializeField] private MeleeFire meleeFire;
     #endregion
 
     #region Unity_Function
@@ -149,23 +152,32 @@ public class PlayerMove : MonoBehaviour, IPunObservable
 
     private void _MeleeAttack()
     {
-        if (Input.GetKeyDown(KeyCode.F) && canMeleeAttack)
+        if (pv.IsMine)
         {
-            canMeleeAttack = false;
-            animator.SetTrigger("MeleeAttack");
+            if (Input.GetKeyDown(KeyCode.F) && canMeleeAttack)
+            {
+                CountMeleeAttack();
+
+                animator.SetTrigger("MeleeAttack");
+            }
         }
     }
-
-    private void MeleeAttack()
+    
+    public void MeleeAttack() => pv.RPC("_MeleeAttackRPC", RpcTarget.All);
+    [PunRPC]
+    private void _MeleeAttackRPC()
     {
-        GameObject obj = PhotonNetwork.Instantiate("Melee_Fire", transform.position, Quaternion.identity);
-
-        if (obj.TryGetComponent(out MeleeFire meleeFire))
-        {
-            meleeFire.IsFlip = spriteRenderer.flipX;
-            meleeFire.Damage = 1;
-        }
+        meleeFire.SetParticleSystem(spriteRenderer.flipX);
+        meleeFire.gameObject.SetActive(true);
     }
+
+    private IEnumerator _CountMeleeAttack()
+    {
+        canMeleeAttack = false;
+        yield return new WaitForSeconds(2);
+        canMeleeAttack = true;
+    }
+    public void CountMeleeAttack() => StartCoroutine(_CountMeleeAttack());
 
     [PunRPC]
     private void _Flip(float input)
@@ -175,6 +187,5 @@ public class PlayerMove : MonoBehaviour, IPunObservable
     }
 
     private void _IdleCount() => idleCount++;
-
     #endregion
 }
