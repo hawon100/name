@@ -401,9 +401,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecdef4b0ca6a3b4458abb3f486304d49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rangedAttackPos: {fileID: 5053445754668901165}
   nameText: {fileID: 38678449}
-  fireBallPrefab: {fileID: 0}
   idleCount: 0
   inputValue: 0
   isGround: 0
@@ -411,6 +409,7 @@ MonoBehaviour:
   jumpPower: 5
   curJumpCount: 0
   maxJumpCount: 2
+  meleeAttackTime: 2
   canMeleeAttack: 1
   playerName: 
   meleeFire: {fileID: 3005904888472756579}

@@ -19,13 +19,7 @@ public class PlayerMove : MonoBehaviour, IPunObservable
 
     private CameraRotate cameraRotate;
 
-
-    [SerializeField] private Transform rangedAttackPos;
-
     [SerializeField] private TextMeshPro nameText;
-
-    [Header("Prefab")]
-    [SerializeField] private GameObject fireBallPrefab;
 
     [Header("Animation Value")]
     [SerializeField] private int idleCount = 0;
@@ -37,6 +31,10 @@ public class PlayerMove : MonoBehaviour, IPunObservable
     [SerializeField] private float jumpPower;
     [SerializeField] private int curJumpCount = 0;
     [SerializeField] private int maxJumpCount = 2;
+
+    [Header ("Melee Attack Stat")]
+    private WaitForSeconds meleeAttackCount;
+    public float meleeAttackTime = 1;
     [SerializeField] private bool canMeleeAttack = true;
 
     [Header("Player Info")]
@@ -57,6 +55,8 @@ public class PlayerMove : MonoBehaviour, IPunObservable
         pv = GetComponent<PhotonView>();
 
         cameraRotate = Camera.main.GetComponent<CameraRotate>();
+
+        meleeAttackCount = new WaitForSeconds(meleeAttackTime);
 
         nameText.text = pv.IsMine ? PhotonNetwork.NickName : pv.Owner.NickName;
         nameText.color = pv.IsMine ? Color.green : Color.red;
@@ -174,7 +174,7 @@ public class PlayerMove : MonoBehaviour, IPunObservable
     private IEnumerator _CountMeleeAttack()
     {
         canMeleeAttack = false;
-        yield return new WaitForSeconds(2);
+        yield return meleeAttackCount;
         canMeleeAttack = true;
     }
     public void CountMeleeAttack() => StartCoroutine(_CountMeleeAttack());
