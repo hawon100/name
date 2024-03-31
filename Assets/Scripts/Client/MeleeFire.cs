@@ -5,19 +5,17 @@ using UnityEngine;
 
 public class MeleeFire : MonoBehaviour
 {
-    public float Damage;
+    public float Damage = 5;
 
     public PlayerMove usePlayer;
 
     private PhotonView pv;
 
-    private ParticleSystem ps;
-    private ParticleSystemRenderer psr;
+    [SerializeField] private ParticleSystem ps;
+    [SerializeField] private ParticleSystemRenderer psr;
 
     private void Start()
     {
-        ps = GetComponent<ParticleSystem>();
-        psr = GetComponent<ParticleSystemRenderer>();
         pv = GetComponent<PhotonView>();
 
         ps.Play();
@@ -29,4 +27,13 @@ public class MeleeFire : MonoBehaviour
         psr.flip = value ? new Vector3(1, 0, 0) : new Vector3(0, 0, 0);
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Player"))
+        {
+            PlayerMove player = other.GetComponent<PlayerMove>();
+
+            if(player != usePlayer) player.Hit(Damage);
+        }
+    }
 }

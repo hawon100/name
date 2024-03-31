@@ -4,12 +4,16 @@ using Photon.Pun;
 using Photon.Realtime;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using Photon.Pun.Demo.Cockpit;
+using HashTable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerMove : MonoBehaviour, IPunObservable
 {
     #region Variable
+
+    private HashTable ht = new HashTable();
 
     [Header("Component")]
     private PhotonView pv;
@@ -19,20 +23,29 @@ public class PlayerMove : MonoBehaviour, IPunObservable
 
     private CameraRotate cameraRotate;
 
-    [SerializeField] private TextMeshPro nameText;
+    public int PVID
+    {
+        get => pv.ViewID;
+    }
+
 
     [Header("Animation Value")]
     [SerializeField] private int idleCount = 0;
     [SerializeField] private float inputValue = 0;
     [SerializeField] private bool isGround;
 
+    [Header ("UI")]
+    [SerializeField] private TextMeshPro nameText;
+    [SerializeField] private Image HPBar;
+
     [Header("Player Stat")]
+    [SerializeField] private float hp;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpPower;
     [SerializeField] private int curJumpCount = 0;
     [SerializeField] private int maxJumpCount = 2;
 
-    [Header ("Melee Attack Stat")]
+    [Header("Melee Attack Stat")]
     private WaitForSeconds meleeAttackCount;
     public float meleeAttackTime = 1;
     [SerializeField] private bool canMeleeAttack = true;
@@ -40,7 +53,7 @@ public class PlayerMove : MonoBehaviour, IPunObservable
     [Header("Player Info")]
     public string playerName = "";
 
-    [Header ("Attack Object")]
+    [Header("Attack Object")]
     [SerializeField] private MeleeFire meleeFire;
     #endregion
 
@@ -60,6 +73,15 @@ public class PlayerMove : MonoBehaviour, IPunObservable
 
         nameText.text = pv.IsMine ? PhotonNetwork.NickName : pv.Owner.NickName;
         nameText.color = pv.IsMine ? Color.green : Color.red;
+
+        HPBar.color = pv.IsMine ? Color.green : Color.red;
+
+        hp = 100;
+        ht["HP"] = hp;
+        ht["ID"] = pv.ViewID;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
+
+        GameManager.instance.players.Add(this);
     }
 
     private void Update()
@@ -69,6 +91,7 @@ public class PlayerMove : MonoBehaviour, IPunObservable
         _Jump();
 
         _MeleeAttack();
+        _SetHPBar();
     }
 
     private void OnCollisionEnter(Collision other)
@@ -162,7 +185,7 @@ public class PlayerMove : MonoBehaviour, IPunObservable
             }
         }
     }
-    
+
     public void MeleeAttack() => pv.RPC("_MeleeAttackRPC", RpcTarget.All);
     [PunRPC]
     private void _MeleeAttackRPC()
@@ -187,5 +210,18 @@ public class PlayerMove : MonoBehaviour, IPunObservable
     }
 
     private void _IdleCount() => idleCount++;
+
+    private void _SetHPBar()
+    {
+        HPBar.fillAmount = hp / 100;
+    }
+
+    public void Hit(float damage)
+    {
+        Debug.Log(damage);
+        hp -= damage;
+        ht["HP"] = hp;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
+    }
     #endregion
 }

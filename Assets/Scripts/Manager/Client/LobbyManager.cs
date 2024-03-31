@@ -11,7 +11,6 @@ public class LobbyManager : MonoBehaviour
 
     public bool isLobby;
 
-    private PhotonView pv;
     #region # Variable
     [Header("Transform")]
     [SerializeField] private Transform roomListContent;
@@ -68,7 +67,6 @@ public class LobbyManager : MonoBehaviour
 
         PhotonNetwork.AutomaticallySyncScene = true;
 
-        pv = GetComponent<PhotonView>();
 
         loginBtn.onClick.AddListener(() => { UIPresetMove(0, 0, 0.5f); });
         loginEnterBtn.onClick.AddListener(() =>
