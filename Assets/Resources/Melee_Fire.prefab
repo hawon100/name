@@ -4922,7 +4922,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.8, y: 0.5, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0.5, y: 0.15, z: 0}
 --- !u!114 &-6217467148190314354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4937,6 +4937,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Damage: 5
   usePlayer: {fileID: 0}
+  boxCollider: {fileID: 5560204000794020067}
   ps: {fileID: 8464708923677230582}
   psr: {fileID: 4725252466005956254}
 --- !u!114 &-7333199370598992790

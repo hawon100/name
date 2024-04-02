@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     public CameraDirection cameraDirection;
 
     public List<PlayerMove> players = new List<PlayerMove>();
-    private bool isSorting = false;
 
     #endregion
 
@@ -51,19 +50,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             yield return new WaitForSeconds(1);
             players = players.OrderBy(x => x.PVID).ToList();
-            isSorting = true;
         }
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, HashTable changedProps)
     {
-        foreach(var item in changedProps)
-        {
-            if((string)item.Key == "HP")
-            {
-                Debug.Log(changedProps["HP"] + " / " + changedProps["ID"]);
-            }
-        }
+
     }
 
     #endregion

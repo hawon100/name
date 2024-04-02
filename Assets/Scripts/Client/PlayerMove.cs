@@ -34,7 +34,7 @@ public class PlayerMove : MonoBehaviour, IPunObservable
     [SerializeField] private float inputValue = 0;
     [SerializeField] private bool isGround;
 
-    [Header ("UI")]
+    [Header("UI")]
     [SerializeField] private TextMeshPro nameText;
     [SerializeField] private Image HPBar;
 
@@ -44,6 +44,8 @@ public class PlayerMove : MonoBehaviour, IPunObservable
     [SerializeField] private float jumpPower;
     [SerializeField] private int curJumpCount = 0;
     [SerializeField] private int maxJumpCount = 2;
+
+    public bool isGuard = false;
 
     [Header("Melee Attack Stat")]
     private WaitForSeconds meleeAttackCount;
@@ -89,6 +91,7 @@ public class PlayerMove : MonoBehaviour, IPunObservable
         _Move();
         _Anim();
         _Jump();
+        _Guard();
 
         _MeleeAttack();
         _SetHPBar();
@@ -187,6 +190,7 @@ public class PlayerMove : MonoBehaviour, IPunObservable
     }
 
     public void MeleeAttack() => pv.RPC("_MeleeAttackRPC", RpcTarget.All);
+
     [PunRPC]
     private void _MeleeAttackRPC()
     {
@@ -216,12 +220,24 @@ public class PlayerMove : MonoBehaviour, IPunObservable
         HPBar.fillAmount = hp / 100;
     }
 
+    private void _Guard()
+    {
+        if (pv.IsMine)
+        {
+            if (Input.GetKeyDown(KeyCode.C)) pv.RPC("Guard", RpcTarget.All, true);
+            //if (Input.GetKeyUp(KeyCode.C)) pv.RPC("Guard", RpcTarget.All, false);
+        }
+    }
+
+    [PunRPC]
+    private void Guard(bool value) => isGuard = value;
+
     public void Hit(float damage)
     {
-        Debug.Log(damage);
         hp -= damage;
         ht["HP"] = hp;
         PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
     }
+
     #endregion
 }

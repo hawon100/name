@@ -84,7 +84,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         else PhotonNetwork.LeaveRoom(true);
     }
 
-    public override void OnConnected() => LobbyManager.SetState("���� �Ǿ����ϴ� !");
+    public override void OnConnected() => LobbyManager.SetState("서버에 연결되었습니다. !");
     public override void OnConnectedToMaster() => PhotonNetwork.JoinLobby();
     public override void OnJoinedLobby()
     {
@@ -93,7 +93,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnCreatedRoom()
     {
-        Debug.Log("���� �����߽��ϴ� ! / " + CurrentRoomName);
+        Debug.Log("방이 생성되었습니다 ! / " + CurrentRoomName);
         if (PhotonNetwork.IsMasterClient)
         {
             for (int i = 0; i < 4; i++) RoomSeatList.Add(false);
@@ -105,7 +105,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
     public override void OnJoinedRoom()
     {
-        LobbyManager.SetState("�濡 �����߽��ϴ� ! / " + CurrentRoomName);
+        LobbyManager.SetState("방에 참가되었습니다 ! / " + CurrentRoomName);
 
         float roomPlayerNum = 1;
 
