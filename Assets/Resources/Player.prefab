@@ -467,6 +467,9 @@ MonoBehaviour:
   - Type: 9
     SynchronizeType: 2
     Name: MeleeAttack
+  - Type: 9
+    SynchronizeType: 0
+    Name: Double_Jump
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0

@@ -152,7 +152,8 @@ public class PlayerMove : MonoBehaviour, IPunObservable
             if (Input.GetKeyDown(KeyCode.Space) && curJumpCount > 0)
             {
                 rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
-                animator.SetTrigger("Jump");
+                if(curJumpCount == 2) animator.SetTrigger("Jump");
+                if(curJumpCount == 1) animator.SetTrigger("Double_Jump");
                 curJumpCount--;
             }
         }
