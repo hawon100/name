@@ -21,11 +21,15 @@ namespace Photon.Realtime
     using System.Collections;
     using ExitGames.Client.Photon;
 
-    #if SUPPORTED_UNITY || NETFX_CORE
+#if SUPPORTED_UNITY || NETFX_CORE
     using Hashtable = ExitGames.Client.Photon.Hashtable;
     using SupportClass = ExitGames.Client.Photon.SupportClass;
-    #endif
+#endif
 
+    public enum GameType
+    {
+        Solo, Team
+    }
 
     /// <summary>
     /// A simplified room with just the info required to list and join, used for the room listing in the lobby.
@@ -37,11 +41,15 @@ namespace Photon.Realtime
     /// </remarks>
     public class RoomInfo
     {
+
         /// <summary>Used in lobby, to mark rooms that are no longer listed (for being full, closed or hidden).</summary>
         public bool RemovedFromList;
 
         /// <summary>Backing field for property.</summary>
         private Hashtable customProperties = new Hashtable();
+
+        /// <summary> Backing field for ptoperty. </summary>
+        protected GameType currentGameType = GameType.Solo;
 
         /// <summary>Backing field for property.</summary>
         protected int maxPlayers = 0;
@@ -90,6 +98,14 @@ namespace Photon.Realtime
             get
             {
                 return this.name;
+            }
+        }
+
+        public GameType CurrentGameType 
+        {
+            get 
+            {
+                return this.currentGameType;
             }
         }
 

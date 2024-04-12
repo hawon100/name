@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using Photon.Pun;
 using DG.Tweening;
 using TMPro;
+using GameType = Photon.Realtime.GameType;
+
 public class LobbyManager : MonoBehaviour
 {
     public static LobbyManager instance;
@@ -27,7 +29,8 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI stateText;
     [SerializeField] private TextMeshProUGUI registerFailText;
     [SerializeField] private TextMeshProUGUI idText;
-
+    [SerializeField] private TextMeshProUGUI currentGameTypeText;
+ 
     [Header("TMP_InputField")]
     [SerializeField] private TMP_InputField roomNameInputField;
     [SerializeField] private TMP_InputField loginIdInputField;
@@ -42,17 +45,21 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private Button registerBtn;
     [SerializeField] private Button registerEngerBtn;
     [SerializeField] private Button roomExitBtn;
+    [SerializeField] private Button roomCreatePanelBtn;
     [SerializeField] private Button PlayerColorRedBtn;
     [SerializeField] private Button PlayerColorBlueBtn;
     [SerializeField] private Button PlayerColorGreenBtn;
     [SerializeField] private Button PlayerColorYellowBtn;
     [SerializeField] private Button startBtn;
+    [SerializeField] private Button soloBtn;
+    [SerializeField] private Button teamBtn;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject roomListPrefab;
 
     [Header("Other")]
     [SerializeField] private List<GameObject> roomListObjects = new List<GameObject>();
+    [SerializeField] private GameType currentGameType = GameType.Solo;
     #endregion
 
     #region # Unity_Function
@@ -79,14 +86,17 @@ public class LobbyManager : MonoBehaviour
         registerBtn.onClick.AddListener(() => { UIPresetMove(0, 1080, 0.5f); });
         registerEngerBtn.onClick.AddListener(() => { GoogleSheetManager.Register(registerIdInputField.text, registerPassInputField.text); });
 
+        roomCreatePanelBtn.onClick.AddListener(() => UIPresetMove(-1920, 1080, 0.5f));
         roomCreateBtn.onClick.AddListener(() =>
         {
-            NetworkManager.CreateRoom(roomNameInputField.text, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 });
-
+            NetworkManager.CreateRoom(roomNameInputField.text, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 }, currentGameType);
         });
         roomExitBtn.onClick.AddListener(() => NetworkManager.ExitRoom());
 
         startBtn.onClick.AddListener(() =>  PhotonNetwork.LoadLevel("InGame"));
+
+        soloBtn.onClick.AddListener(() => { currentGameType = GameType.Solo; currentGameTypeText.text = "선택한 게임 모드 : 개인전"; });
+        teamBtn.onClick.AddListener(() => { currentGameType = GameType.Team; currentGameTypeText.text = "선택한 게임 모드 : 팀전"; });
 
         PlayerColorRedBtn.onClick.AddListener(() => { PlayerColorPreviewImage.color = PlayerColorRedBtn.GetComponent<Image>().color; });
         PlayerColorBlueBtn.onClick.AddListener(() => { PlayerColorPreviewImage.color = PlayerColorBlueBtn.GetComponent<Image>().color; });
@@ -155,6 +165,7 @@ public class LobbyManager : MonoBehaviour
                 IsVisible = roomInfo.IsVisible,
                 MaxPlayers = roomInfo.MaxPlayers,
                 PlayerCount = roomInfo.PlayerCount,
+               // CurGameType = (GameType)PhotonNetwork.CurrentRoom.CustomProperties["GameType"]  
             };
 
             roomDataList.Add(roomData);

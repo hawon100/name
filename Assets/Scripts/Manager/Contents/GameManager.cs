@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        playerObject = PhotonNetwork.Instantiate("Player", new Vector3(0, 1, -4.5f), Quaternion.identity);
+        playerObject = PhotonNetwork.Instantiate("Player", new Vector3(0, 1, -7f), Quaternion.identity);
         currentPlayer = playerObject.GetComponent<PlayerMove>();
 
         _SetPlayerList();

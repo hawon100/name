@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using GameType = Photon.Realtime.GameType;
 
 [System.Serializable]
 public class Data
@@ -13,7 +14,10 @@ public class Data
     public int PlayerCount;
 
     public bool IsVisible;
+
+    public GameType CurGameType = GameType.Solo;
 }
+
 public class RoomData : MonoBehaviour
 {
     #region Variable
@@ -35,6 +39,7 @@ public class RoomData : MonoBehaviour
     [Header("Text")]
     [SerializeField] private TextMeshProUGUI roomNameText;
     [SerializeField] private TextMeshProUGUI playerCountText;
+    [SerializeField] private TextMeshProUGUI gameTypeText;
 
     #endregion
 
@@ -51,16 +56,13 @@ public class RoomData : MonoBehaviour
     {
         roomNameText.text = "방 이름 : " + currentData.Name;
         playerCountText.text = "인원 : " + currentData.PlayerCount + "/" + currentData.MaxPlayers;
-
-        Debug.Log("방 이름 : " + currentData.Name);
-        Debug.Log("인원 : " + currentData.PlayerCount + "/" + currentData.MaxPlayers);
+        gameTypeText.text = CurrentData.CurGameType == GameType.Solo ? "개인전" : "팀전";
     }
     public void UISetting() => _UISetting();
 
     public void Join()
     {
         if (currentData.PlayerCount < currentData.MaxPlayers) NetworkManager.JoinRoom(currentData.Name);
-        else Debug.Log("방에 최대 인원이 채워져있습니다.");
     }
     public void DestroyRoom() => Destroy(gameObject);
     #endregion

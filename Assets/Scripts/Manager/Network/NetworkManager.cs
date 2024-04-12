@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using GameType = Photon.Realtime.GameType;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -13,6 +14,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     private PhotonView pv;
     public string NickName;
     public int PlayerNum = 0;
+    public GameType currentGameType;
 
     public int PlayerCount
     {
@@ -71,12 +73,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         instance.CurrentRoomName = roomName;
     }
-    public static void CreateRoom(string roomName, RoomOptions roomOptions)
+    public static void CreateRoom(string roomName, RoomOptions roomOptions, GameType gameType)
     {
+        instance.currentGameType = gameType;
+
+        roomOptions.CustomRoomProperties = new Hashtable() { { "GameType", (int)gameType } };
+        roomOptions.CustomRoomPropertiesForLobby = new string[] { "GameType" };
+
         PhotonNetwork.CreateRoom(roomName, roomOptions);
+
+
         instance.CurrentRoomName = roomName;
-
-
     }
     public static void ExitRoom()
     {
@@ -226,7 +233,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         return (int)currentRoom.CustomProperties[name];
     }
-    
+
     public static bool CurrentBoolRoomGetCP(string name) => instance._CurrentBoolRoomGetCP(name);
     public static int CurrentIntRoomGetCP(string name) => instance._CurrentIntRoomGetCP(name);
 

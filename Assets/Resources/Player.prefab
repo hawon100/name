@@ -453,22 +453,22 @@ MonoBehaviour:
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 4
-    SynchronizeType: 2
+    SynchronizeType: 1
     Name: IsWalk
   - Type: 4
-    SynchronizeType: 2
+    SynchronizeType: 1
     Name: IsFall
   - Type: 9
-    SynchronizeType: 2
+    SynchronizeType: 1
     Name: Sigh
   - Type: 9
-    SynchronizeType: 2
+    SynchronizeType: 1
     Name: Jump
   - Type: 9
-    SynchronizeType: 2
+    SynchronizeType: 1
     Name: MeleeAttack
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: Double_Jump
   m_SynchronizeLayers:
   - SynchronizeType: 0
