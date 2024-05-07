@@ -11,11 +11,19 @@ public class CameraRotate : MonoBehaviour
 
     [SerializeField] public CameraDirection cameraDirection { get; private set; }
 
+    [SerializeField] public Light mainLight;
+
     [Header("Direction Transform")]
     [SerializeField] private Transform south;
     [SerializeField] private Transform west;
     [SerializeField] private Transform north;
     [SerializeField] private Transform east;
+
+    [Header("Direction Light")]
+    [SerializeField] private Vector3 southLight;
+    [SerializeField] private Vector3 westLight;
+    [SerializeField] private Vector3 northLight;
+    [SerializeField] private Vector3 eastLight;
     #endregion
 
     #region Function
@@ -31,6 +39,7 @@ public class CameraRotate : MonoBehaviour
 
                 isRotate = true;
                 _Rotate();
+                _LightRotate();
             }
             else if (Input.GetKeyDown(KeyCode.Q))
             {
@@ -40,6 +49,7 @@ public class CameraRotate : MonoBehaviour
 
                 isRotate = true;
                 _Rotate();
+                _LightRotate();
             }
         }
     }
@@ -71,6 +81,25 @@ public class CameraRotate : MonoBehaviour
         }
     }
 
+    private void _LightRotate()
+    {
+        switch (cameraDirection)
+        {
+            case CameraDirection.S:
+                mainLight.transform.DORotate(southLight, 1);
+                break;
+            case CameraDirection.W:
+                mainLight.transform.DORotate(westLight, 1);
+                break;
+            case CameraDirection.E:
+                mainLight.transform.DORotate(eastLight, 1);
+                break;
+            case CameraDirection.N:
+                mainLight.transform.DORotate(northLight, 1);
+                break;
+        }
+    }
+
     private void _TraceY()
     {
         float y = GameManager.instance.playerObject.transform.position.y + 1;
@@ -90,6 +119,5 @@ public class CameraRotate : MonoBehaviour
         _TraceY();
     }
 
-    
     #endregion
 }

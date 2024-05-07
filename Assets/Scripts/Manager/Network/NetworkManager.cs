@@ -73,15 +73,23 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         instance.CurrentRoomName = roomName;
     }
-    public static void CreateRoom(string roomName, RoomOptions roomOptions, GameType gameType)
+    public static void CreateRoom(string roomName, int maxPlayer, GameType gameType)
     {
         instance.currentGameType = gameType;
 
-        roomOptions.CustomRoomProperties = new Hashtable() { { "GameType", (int)gameType } };
-        roomOptions.CustomRoomPropertiesForLobby = new string[] { "GameType" };
+        string gameTypeKey = "GameType";
+       
+        Hashtable customRoomProperties = new Hashtable() { { gameTypeKey, (int)gameType } };
+        string[] customRoomPropertiesForLobby = new string[1] { gameTypeKey };
 
+        RoomOptions roomOptions = new RoomOptions()
+        {
+            MaxPlayers = maxPlayer,
+            CustomRoomProperties = customRoomProperties,
+            CustomRoomPropertiesForLobby = customRoomPropertiesForLobby
+        };
+        
         PhotonNetwork.CreateRoom(roomName, roomOptions);
-
 
         instance.CurrentRoomName = roomName;
     }

@@ -16,12 +16,15 @@ public class GameManager : MonoBehaviourPunCallbacks
     #region Variable
     public static GameManager instance;
 
+    public GameType gameType;
+
     public GameObject playerObject;
     public PlayerMove currentPlayer;
 
     public CameraDirection cameraDirection;
 
     public List<PlayerMove> players = new List<PlayerMove>();
+
 
     #endregion
 
@@ -32,11 +35,13 @@ public class GameManager : MonoBehaviourPunCallbacks
         else Destroy(gameObject);
     }
 
-
     private void Start()
     {
-        playerObject = PhotonNetwork.Instantiate("Player", new Vector3(0, 1, -7f), Quaternion.identity);
+        float x = PhotonNetwork.IsMasterClient ? -3 : 3;
+        playerObject = PhotonNetwork.Instantiate("New Player", new Vector3(x, 1, -7f), Quaternion.identity);
         currentPlayer = playerObject.GetComponent<PlayerMove>();
+
+        gameType = (GameType)NetworkManager.CurrentIntRoomGetCP("GameType");
 
         _SetPlayerList();
     }

@@ -30,7 +30,7 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI registerFailText;
     [SerializeField] private TextMeshProUGUI idText;
     [SerializeField] private TextMeshProUGUI currentGameTypeText;
- 
+
     [Header("TMP_InputField")]
     [SerializeField] private TMP_InputField roomNameInputField;
     [SerializeField] private TMP_InputField loginIdInputField;
@@ -89,11 +89,11 @@ public class LobbyManager : MonoBehaviour
         roomCreatePanelBtn.onClick.AddListener(() => UIPresetMove(-1920, 1080, 0.5f));
         roomCreateBtn.onClick.AddListener(() =>
         {
-            NetworkManager.CreateRoom(roomNameInputField.text, new Photon.Realtime.RoomOptions() { MaxPlayers = 4 }, currentGameType);
+            NetworkManager.CreateRoom(roomNameInputField.text, 4, currentGameType);
         });
         roomExitBtn.onClick.AddListener(() => NetworkManager.ExitRoom());
 
-        startBtn.onClick.AddListener(() =>  PhotonNetwork.LoadLevel("InGame"));
+        startBtn.onClick.AddListener(() => PhotonNetwork.LoadLevel("InGame"));
 
         soloBtn.onClick.AddListener(() => { currentGameType = GameType.Solo; currentGameTypeText.text = "선택한 게임 모드 : 개인전"; });
         teamBtn.onClick.AddListener(() => { currentGameType = GameType.Team; currentGameTypeText.text = "선택한 게임 모드 : 팀전"; });
@@ -165,7 +165,7 @@ public class LobbyManager : MonoBehaviour
                 IsVisible = roomInfo.IsVisible,
                 MaxPlayers = roomInfo.MaxPlayers,
                 PlayerCount = roomInfo.PlayerCount,
-               // CurGameType = (GameType)PhotonNetwork.CurrentRoom.CustomProperties["GameType"]  
+                CurGameType = (GameType)roomInfo.CustomProperties["GameType"]
             };
 
             roomDataList.Add(roomData);
